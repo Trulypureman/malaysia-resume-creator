@@ -1,0 +1,1635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Malaysia Resume Creator</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0D1B2A;
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --cream: #F8F4EC;
+    --cream-dark: #EDE7D8;
+    --text: #1A1A2E;
+    --muted: #6B6B7B;
+    --white: #FFFFFF;
+    --red: #CC3333;
+    --success: #2D7A4F;
+    --border: #D8D1C4;
+    --section-bg: #FDFBF7;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--navy);
+    padding: 18px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-icon {
+    width: 38px;
+    height: 38px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  .logo-text {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    color: var(--white);
+    letter-spacing: 0.3px;
+  }
+
+  .logo-text span { color: var(--gold); }
+
+  .header-badge {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid rgba(201,168,76,0.4);
+    color: var(--gold-light);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(160deg, var(--navy) 0%, #1a2d44 60%, #243850 100%);
+    padding: 60px 40px 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .hero-tag {
+    display: inline-block;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid rgba(201,168,76,0.5);
+    color: var(--gold-light);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 6px 16px;
+    border-radius: 20px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 5vw, 46px);
+    color: var(--white);
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+
+  .hero h1 span { color: var(--gold); }
+
+  .hero p {
+    color: rgba(255,255,255,0.7);
+    font-size: 15px;
+    max-width: 520px;
+    margin: 0 auto 30px;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .hero-steps {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+  }
+
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: rgba(255,255,255,0.75);
+    font-size: 13px;
+  }
+
+  .step-num {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--gold);
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* ── MAIN LAYOUT ── */
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 24px 60px;
+  }
+
+  /* ── SECTION CARD ── */
+  .form-section {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: box-shadow 0.3s;
+  }
+
+  .form-section:hover {
+    box-shadow: 0 4px 24px rgba(13,27,42,0.08);
+  }
+
+  .section-header {
+    background: var(--section-bg);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .section-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--navy), #1f3a58);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .section-title-wrap { flex: 1; }
+
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 17px;
+    color: var(--navy);
+    margin-bottom: 2px;
+  }
+
+  .section-sub {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  .section-required {
+    background: rgba(204,51,51,0.1);
+    color: var(--red);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .section-optional {
+    background: rgba(13,27,42,0.07);
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .chevron {
+    color: var(--muted);
+    font-size: 14px;
+    transition: transform 0.3s;
+  }
+
+  .section-body {
+    padding: 24px;
+    display: none;
+  }
+
+  .section-body.open {
+    display: block;
+    animation: slideDown 0.25s ease;
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── FORM ELEMENTS ── */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .form-grid.three { grid-template-columns: 1fr 1fr 1fr; }
+  .form-grid.full  { grid-template-columns: 1fr; }
+
+  @media (max-width: 640px) {
+    .form-grid, .form-grid.three { grid-template-columns: 1fr; }
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .field.span-2 { grid-column: span 2; }
+  @media (max-width: 640px) { .field.span-2 { grid-column: span 1; } }
+
+  label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--navy);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  label .req { color: var(--red); margin-left: 3px; }
+  label .tip {
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 400;
+    margin-left: 6px;
+  }
+
+  input, textarea, select {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    transition: border-color 0.2s, background 0.2s;
+    width: 100%;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--navy);
+    background: var(--white);
+  }
+
+  textarea { resize: vertical; min-height: 80px; }
+
+  .hint {
+    font-size: 11px;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  /* ── REPEATABLE ENTRIES ── */
+  .entries-wrap { display: flex; flex-direction: column; gap: 16px; }
+
+  .entry-card {
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    position: relative;
+  }
+
+  .entry-num {
+    position: absolute;
+    top: -10px;
+    left: 16px;
+    background: var(--navy);
+    color: var(--gold);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 10px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .remove-btn {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: none;
+    border: none;
+    color: var(--red);
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+  }
+
+  .remove-btn:hover { opacity: 1; }
+
+  .add-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: 1.5px dashed var(--navy);
+    color: var(--navy);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 11px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    justify-content: center;
+    margin-top: 6px;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .add-btn:hover {
+    background: var(--navy);
+    color: var(--white);
+  }
+
+  /* ── SKILL TAGS ── */
+  .tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .tag {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--navy);
+    color: var(--white);
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  .tag button {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.6);
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    padding: 0;
+  }
+
+  .tag-input-row {
+    display: flex;
+    gap: 8px;
+  }
+
+  .tag-input-row input { flex: 1; }
+
+  .tag-add-btn {
+    background: var(--navy);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    padding: 0 16px;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: 300;
+    transition: background 0.2s;
+    flex-shrink: 0;
+  }
+
+  .tag-add-btn:hover { background: var(--gold); color: var(--navy); }
+
+  /* ── DIVIDER ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 18px 0;
+  }
+
+  /* ── GENERATE BAR ── */
+  .generate-bar {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 28px;
+    box-shadow: 0 4px 24px rgba(13,27,42,0.08);
+  }
+
+  .generate-bar-left h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+
+  .generate-bar-left p {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .generate-btns {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    border-radius: 9px;
+    padding: 12px 22px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--navy), #1f3a58);
+    color: var(--white);
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(135deg, #1f3a58, var(--navy));
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(13,27,42,0.25);
+  }
+
+  .btn-gold {
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: var(--navy);
+  }
+
+  .btn-gold:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(201,168,76,0.35);
+  }
+
+  .btn-outline {
+    background: none;
+    border: 1.5px solid var(--border);
+    color: var(--text);
+  }
+
+  .btn-outline:hover {
+    border-color: var(--navy);
+    background: var(--cream);
+  }
+
+  /* ── MODAL PREVIEW ── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(13,27,42,0.75);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--white);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 720px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    animation: modalIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  }
+
+  @keyframes modalIn {
+    from { transform: scale(0.92); opacity: 0; }
+    to   { transform: scale(1);    opacity: 1; }
+  }
+
+  .modal-header {
+    background: var(--navy);
+    padding: 20px 28px;
+    border-radius: 16px 16px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .modal-header h2 {
+    font-family: 'DM Serif Display', serif;
+    color: var(--white);
+    font-size: 20px;
+  }
+
+  .modal-header span { color: var(--gold); }
+
+  .modal-close {
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: var(--white);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+
+  .modal-close:hover { background: rgba(255,255,255,0.2); }
+
+  /* ── RESUME PREVIEW ── */
+  #resume-preview {
+    padding: 40px;
+    font-family: 'Georgia', serif;
+    color: #1a1a1a;
+    background: #fff;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .rv-header {
+    border-bottom: 3px solid #0D1B2A;
+    padding-bottom: 16px;
+    margin-bottom: 18px;
+  }
+
+  .rv-name {
+    font-size: 26px;
+    font-weight: bold;
+    color: #0D1B2A;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  .rv-title {
+    font-size: 14px;
+    color: #6B6B7B;
+    font-style: italic;
+    margin-bottom: 10px;
+  }
+
+  .rv-contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+    font-size: 12px;
+    color: #444;
+  }
+
+  .rv-section { margin-bottom: 16px; }
+
+  .rv-section-title {
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #0D1B2A;
+    border-bottom: 1.5px solid #C9A84C;
+    padding-bottom: 4px;
+    margin-bottom: 10px;
+  }
+
+  .rv-summary { font-size: 13px; color: #333; line-height: 1.65; }
+
+  .rv-exp { margin-bottom: 12px; }
+
+  .rv-exp-header { display: flex; justify-content: space-between; align-items: flex-start; }
+
+  .rv-exp-pos { font-weight: bold; font-size: 13px; color: #0D1B2A; }
+
+  .rv-exp-date { font-size: 11px; color: #777; white-space: nowrap; }
+
+  .rv-exp-company { font-size: 12px; color: #555; font-style: italic; margin-bottom: 5px; }
+
+  .rv-exp-desc { font-size: 12px; color: #333; white-space: pre-wrap; }
+
+  .rv-edu { margin-bottom: 10px; }
+
+  .rv-edu-deg { font-weight: bold; font-size: 13px; }
+
+  .rv-edu-inst { font-size: 12px; color: #555; font-style: italic; }
+
+  .rv-edu-year { font-size: 11px; color: #777; }
+
+  .rv-skills-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .rv-skill {
+    background: #f0ede7;
+    border: 1px solid #d8d1c4;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    color: #333;
+  }
+
+  .rv-refs { font-size: 12px; color: #555; font-style: italic; }
+
+  .modal-actions {
+    padding: 20px 28px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    background: var(--section-bg);
+    border-radius: 0 0 16px 16px;
+  }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--navy);
+    color: var(--white);
+    padding: 14px 22px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    z-index: 9999;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+  }
+
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: var(--muted);
+    font-size: 12px;
+    border-top: 1px solid var(--border);
+  }
+
+  footer a { color: var(--navy); text-decoration: none; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-icon">📄</div>
+    <div class="logo-text">Malaysia <span>Resume</span> Creator</div>
+  </div>
+  <div class="header-badge">MY HR Standard</div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">🇲🇾 Built for Malaysian Job Seekers</div>
+  <h1>Create Your <span>Professional</span><br>Malaysian Resume</h1>
+  <p>Fill in each section below. Your resume will be generated following HR-recommended standards for the Malaysian job market — ATS-friendly and ready to download.</p>
+  <div class="hero-steps">
+    <div class="step"><div class="step-num">1</div> Fill in your details</div>
+    <div class="step"><div class="step-num">2</div> Preview your resume</div>
+    <div class="step"><div class="step-num">3</div> Download or export</div>
+  </div>
+</div>
+
+<!-- MAIN FORM -->
+<div class="container">
+
+  <!-- PERSONAL INFO -->
+  <div class="form-section">
+    <div class="section-header" onclick="toggle(this)">
+      <div class="section-icon">👤</div>
+      <div class="section-title-wrap">
+        <div class="section-title">Personal Information</div>
+        <div class="section-sub">Contact details & professional photo</div>
+      </div>
+      <span class="section-required">Required</span>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="section-body open">
+      <div class="form-grid">
+        <div class="field">
+          <label>Full Name <span class="req">*</span></label>
+          <input type="text" id="name" placeholder="e.g. Ahmad Fariz bin Abdullah" />
+        </div>
+        <div class="field">
+          <label>Job Title / Desired Position <span class="req">*</span></label>
+          <input type="text" id="jobTitle" placeholder="e.g. Marketing Executive" />
+        </div>
+        <div class="field">
+          <label>Email Address <span class="req">*</span></label>
+          <input type="email" id="email" placeholder="e.g. ahmadfariz@gmail.com" />
+        </div>
+        <div class="field">
+          <label>Phone Number <span class="req">*</span></label>
+          <input type="text" id="phone" placeholder="e.g. +60 12-345 6789" />
+        </div>
+        <div class="field">
+          <label>Location <span class="req">*</span> <span class="tip">City, State</span></label>
+          <input type="text" id="location" placeholder="e.g. Kuala Lumpur, Selangor" />
+        </div>
+        <div class="field">
+          <label>LinkedIn URL <span class="tip">recommended</span></label>
+          <input type="text" id="linkedin" placeholder="linkedin.com/in/yourname" />
+        </div>
+        <div class="field">
+          <label>IC / NRIC Number <span class="tip">optional — some employers require</span></label>
+          <input type="text" id="nric" placeholder="e.g. 900101-14-1234" />
+        </div>
+        <div class="field">
+          <label>Nationality</label>
+          <select id="nationality">
+            <option value="Malaysian">Malaysian</option>
+            <option value="Permanent Resident">Permanent Resident</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Gender <span class="tip">common in MY resumes</span></label>
+          <select id="gender">
+            <option value="">Prefer not to say</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Race / Ethnicity <span class="tip">optional</span></label>
+          <select id="race">
+            <option value="">Prefer not to say</option>
+            <option value="Malay">Malay</option>
+            <option value="Chinese">Chinese</option>
+            <option value="Indian">Indian</option>
+            <option value="Iban">Iban</option>
+            <option value="Bidayuh">Bidayuh</option>
+            <option value="Kadazan-Dusun">Kadazan-Dusun</option>
+            <option value="Orang Asli">Orang Asli</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Marital Status <span class="tip">optional</span></label>
+          <select id="marital">
+            <option value="">Prefer not to say</option>
+            <option value="Single">Single</option>
+            <option value="Married">Married</option>
+            <option value="Divorced">Divorced</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Date of Birth <span class="tip">optional</span></label>
+          <input type="date" id="dob" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXECUTIVE SUMMARY -->
+  <div class="form-section">
+    <div class="section-header" onclick="toggle(this)">
+      <div class="section-icon">✍️</div>
+      <div class="section-title-wrap">
+        <div class="section-title">Professional Summary / Executive Summary</div>
+        <div class="section-sub">Your 30-second elevator pitch — 3 to 5 sentences</div>
+      </div>
+      <span class="section-required">Required</span>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="field">
+        <label>Professional Summary <span class="req">*</span></label>
+        <textarea id="summary" rows="5" placeholder="e.g. Results-driven Marketing Executive with 5 years of experience in digital campaigns across the Malaysian FMCG sector. Proven track record of increasing brand visibility by 40% through data-driven strategies and cross-functional collaboration. Seeking to leverage my expertise to drive growth at a forward-thinking organisation."></textarea>
+        <span class="hint">💡 HR Tip: First thing recruiters read after your name. State who you are, your years of experience, and your key value proposition. Keep it to 3–5 sentences.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORK EXPERIENCE -->
+  <div class="form-section">
+    <div class="section-header" onclick="toggle(this)">
+      <div class="section-icon">💼</div>
+      <div class="section-title-wrap">
+        <div class="section-title">Work Experience</div>
+        <div class="section-sub">Most recent position first (reverse chronological)</div>
+      </div>
+      <span class="section-required">Required</span>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="entries-wrap" id="exp-entries"></div>
+      <button class="add-btn" onclick="addEntry('exp')">＋ Add Work Experience</button>
+      <p class="hint" style="margin-top:10px">💡 HR Tip: Include metrics — e.g. "Increased sales by 25%", "Managed a team of 8". List achievements, not just duties.</p>
+    </div>
+  </div>
+
+  <!-- EDUCATION -->
+  <div class="form-section">
+    <div class="section-header" onclick="toggle(this)">
+      <div class="section-icon">🎓</div>
+      <div class="section-title-wrap">
+        <div class="section-title">Education</div>
+        <div class="section-sub">Highest qualification first</div>
+      </div>
+      <span class="section-required">Required</span>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="entries-wrap" id="edu-entries"></div>
+      <button class="add-btn" onclick="addEntry('edu')">＋ Add Education</button>
+    </div>
+  </div>
+
+  <!-- SKILLS -->
+  <div class="form-section">
+    <div class="section-header" onclick="toggle(this)">
+      <div class="section-icon">⚡</div>
+      <div class="section-title-wrap">
+        <div class="section-title">Skills</div>
+        <div class="section-sub">Technical & soft skills — important for ATS</div>
+      </div>
+      <span class="section-required">Required</span>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="form-grid">
+        <div class="field span-2">
+          <label>Technical / Hard Skills</label>
+          <div class="tags-container" id="hard-tags"></div>
+          <div class="tag-input-row">
+            <input type="text" id="hard-input" placeholder="e.g. Microsoft Excel, AutoCAD, Python..." onkeydown="tagKey(event,'hard')" />
+            <button class="tag-add-btn" onclick="addTag('hard')">+</button>
+          </div>
+        </div>
+        <div class="field span-2">
+          <label>Soft Skills</label>
+          <div class="tags-container" id="soft-tags"></div>
+          <div class="tag-input-row">
+            <input type="text" id="soft-input" placeholder="e.g. Leadership, Communication, Problem Solving..." onkeydown="tagKey(event,'soft')" />
+            <button class="tag-add-btn" onclick="addTag('soft')">+</button>
+          </div>
+        </div>
+      </div>
+      <span class="hint" style="margin-top:10px;display:block">💡 HR Tip: Match keywords from the job description to pass ATS filters. Be specific (e.g. "Google Ads" instead of just "Digital Marketing").</span>
+    </div>
+  </div>
+
+  <!-- LANGUAGES -->
+  <div class="form-section">
+    <div class="section-header" onclick="toggle(this)">
+      <div class="section-icon">🗣️</div>
+      <div class="section-title-wrap">
+        <div class="section-title">Languages</div>
+        <div class="section-sub">Important in Malaysia's multilingual market</div>
+      </div>
+      <span class="section-optional">Optional</span>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="entries-wrap" id="lang-entries"></div>
+      <button class="add-btn" onclick="addEntry('lang')">＋ Add Language</button>
+    </div>
+  </div>
+
+  <!-- CERTIFICATIONS -->
+  <div class="form-section">
+    <div class="section-header" onclick="toggle(this)">
+      <div class="section-icon">🏅</div>
+      <div class="section-title-wrap">
+        <div class="section-title">Certifications & Professional Training</div>
+        <div class="section-sub">Industry certs, online courses, workshops</div>
+      </div>
+      <span class="section-optional">Optional</span>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="entries-wrap" id="cert-entries"></div>
+      <button class="add-btn" onclick="addEntry('cert')">＋ Add Certification</button>
+    </div>
+  </div>
+
+  <!-- AWARDS -->
+  <div class="form-section">
+    <div class="section-header" onclick="toggle(this)">
+      <div class="section-icon">🏆</div>
+      <div class="section-title-wrap">
+        <div class="section-title">Awards & Achievements</div>
+        <div class="section-sub">Academic awards, competitions, recognition</div>
+      </div>
+      <span class="section-optional">Optional</span>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="field">
+        <label>Awards / Achievements</label>
+        <textarea id="awards" rows="3" placeholder="e.g. Dean's List — Universiti Malaya (2018–2020)&#10;Best Salesperson Award — XYZ Sdn Bhd (2022)"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- VOLUNTEER / CO-CURRICULUM -->
+  <div class="form-section">
+    <div class="section-header" onclick="toggle(this)">
+      <div class="section-icon">🤝</div>
+      <div class="section-title-wrap">
+        <div class="section-title">Volunteer Work & Co-Curriculum Activities</div>
+        <div class="section-sub">Clubs, societies, community service — valued by MY employers</div>
+      </div>
+      <span class="section-optional">Optional</span>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="field">
+        <label>Activities & Roles</label>
+        <textarea id="volunteer" rows="3" placeholder="e.g. President — Universiti Putra Malaysia Debate Club (2017–2019)&#10;Volunteer — Yayasan Food Bank Malaysia (2021–Present)"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPECTED SALARY -->
+  <div class="form-section">
+    <div class="section-header" onclick="toggle(this)">
+      <div class="section-icon">💰</div>
+      <div class="section-title-wrap">
+        <div class="section-title">Expected Salary & Availability</div>
+        <div class="section-sub">Placed near end of resume as per MY HR standard</div>
+      </div>
+      <span class="section-optional">Optional</span>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="form-grid">
+        <div class="field">
+          <label>Current Basic Salary (RM/month)</label>
+          <input type="text" id="currentSalary" placeholder="e.g. RM 3,500" />
+          <span class="hint">State basic only, not including allowances or bonuses</span>
+        </div>
+        <div class="field">
+          <label>Expected Salary (RM/month)</label>
+          <input type="text" id="expectedSalary" placeholder="e.g. RM 5,000 – RM 6,500" />
+        </div>
+        <div class="field">
+          <label>Notice Period</label>
+          <select id="notice">
+            <option value="">Select...</option>
+            <option value="Immediately available">Immediately available</option>
+            <option value="1 month notice">1 month notice</option>
+            <option value="2 months notice">2 months notice</option>
+            <option value="3 months notice">3 months notice</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Willing to Relocate?</label>
+          <select id="relocate">
+            <option value="">Select...</option>
+            <option value="Yes, willing to relocate">Yes</option>
+            <option value="No, prefer current location">No</option>
+            <option value="Willing to discuss">Open to discussion</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REFERENCES -->
+  <div class="form-section">
+    <div class="section-header" onclick="toggle(this)">
+      <div class="section-icon">📋</div>
+      <div class="section-title-wrap">
+        <div class="section-title">References</div>
+        <div class="section-sub">Leave blank to auto-insert "Available upon request"</div>
+      </div>
+      <span class="section-optional">Optional</span>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="entries-wrap" id="ref-entries"></div>
+      <button class="add-btn" onclick="addEntry('ref')">＋ Add Reference</button>
+      <span class="hint" style="margin-top:8px;display:block">💡 HR Tip: You don't need to list references upfront. "Available upon request" is perfectly acceptable and standard in Malaysia.</span>
+    </div>
+  </div>
+
+  <!-- GENERATE BAR -->
+  <div class="generate-bar">
+    <div class="generate-bar-left">
+      <h3>Ready to Generate?</h3>
+      <p>Preview your resume, then download as PDF or export to Google Docs.</p>
+    </div>
+    <div class="generate-btns">
+      <button class="btn btn-outline" onclick="clearAll()">🗑 Clear All</button>
+      <button class="btn btn-gold" onclick="previewResume()">👁 Preview Resume</button>
+      <button class="btn btn-primary" onclick="downloadHTML()">⬇ Download PDF</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Resume <span>Preview</span></h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div id="resume-preview"></div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal()">✕ Close</button>
+      <button class="btn btn-gold" onclick="exportGoogleDocs()">📤 Open in Google Docs</button>
+      <button class="btn btn-primary" onclick="downloadHTML()">⬇ Download PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✅ Action completed!</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>Malaysia Resume Creator &nbsp;·&nbsp; Based on HR standards from <a href="https://www.jobstreet.com.my" target="_blank">Jobstreet</a>, <a href="https://www.maukerja.my" target="_blank">Maukerja</a> & <a href="https://www.resumewriter.my" target="_blank">ResumeWriter.my</a></p>
+  <p style="margin-top:6px">Open source &nbsp;·&nbsp; No data stored &nbsp;·&nbsp; All processing done in your browser</p>
+</footer>
+
+<script>
+// ── STATE ──
+const state = {
+  hardSkills: [],
+  softSkills: [],
+  expEntries: [],
+  eduEntries: [],
+  langEntries: [],
+  certEntries: [],
+  refEntries: [],
+};
+
+// ── ACCORDION ──
+function toggle(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.chevron');
+  body.classList.toggle('open');
+  chevron.textContent = body.classList.contains('open') ? '▴' : '▾';
+}
+
+// ── TAGS ──
+function addTag(type) {
+  const input = document.getElementById(`${type}-input`);
+  const val = input.value.trim();
+  if (!val) return;
+  const arr = type === 'hard' ? state.hardSkills : state.softSkills;
+  if (!arr.includes(val)) {
+    arr.push(val);
+    renderTags(type);
+  }
+  input.value = '';
+}
+
+function tagKey(e, type) { if (e.key === 'Enter') { e.preventDefault(); addTag(type); } }
+
+function removeTag(type, idx) {
+  const arr = type === 'hard' ? state.hardSkills : state.softSkills;
+  arr.splice(idx, 1);
+  renderTags(type);
+}
+
+function renderTags(type) {
+  const arr = type === 'hard' ? state.hardSkills : state.softSkills;
+  const container = document.getElementById(`${type}-tags`);
+  container.innerHTML = arr.map((t, i) =>
+    `<div class="tag">${t}<button onclick="removeTag('${type}',${i})">×</button></div>`
+  ).join('');
+}
+
+// ── ENTRIES ──
+function addEntry(type) {
+  const id = Date.now();
+  if (type === 'exp') {
+    state.expEntries.push({ id, position:'', company:'', location:'', from:'', to:'', current:false, description:'' });
+  } else if (type === 'edu') {
+    state.eduEntries.push({ id, degree:'', field:'', institution:'', from:'', to:'', cgpa:'' });
+  } else if (type === 'lang') {
+    state.langEntries.push({ id, language:'', level:'' });
+  } else if (type === 'cert') {
+    state.certEntries.push({ id, name:'', issuer:'', year:'' });
+  } else if (type === 'ref') {
+    state.refEntries.push({ id, name:'', position:'', company:'', phone:'', email:'' });
+  }
+  renderEntries(type);
+  setTimeout(() => {
+    const wrap = document.getElementById(`${type}-entries`);
+    wrap.lastElementChild && wrap.lastElementChild.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }, 50);
+}
+
+function removeEntry(type, id) {
+  if (type === 'exp') state.expEntries = state.expEntries.filter(e=>e.id!==id);
+  else if (type === 'edu') state.eduEntries = state.eduEntries.filter(e=>e.id!==id);
+  else if (type === 'lang') state.langEntries = state.langEntries.filter(e=>e.id!==id);
+  else if (type === 'cert') state.certEntries = state.certEntries.filter(e=>e.id!==id);
+  else if (type === 'ref') state.refEntries = state.refEntries.filter(e=>e.id!==id);
+  renderEntries(type);
+}
+
+function renderEntries(type) {
+  const wrap = document.getElementById(`${type}-entries`);
+  if (type === 'exp') {
+    wrap.innerHTML = state.expEntries.map((e, i) => `
+      <div class="entry-card">
+        <span class="entry-num">Experience ${i+1}</span>
+        <button class="remove-btn" onclick="removeEntry('exp',${e.id})">×</button>
+        <div class="form-grid" style="margin-top:10px">
+          <div class="field">
+            <label>Job Position / Title <span class="req">*</span></label>
+            <input type="text" value="${esc(e.position)}" placeholder="e.g. Senior Marketing Executive" oninput="updateEntry('exp',${e.id},'position',this.value)" />
+          </div>
+          <div class="field">
+            <label>Company Name <span class="req">*</span></label>
+            <input type="text" value="${esc(e.company)}" placeholder="e.g. XYZ Sdn Bhd" oninput="updateEntry('exp',${e.id},'company',this.value)" />
+          </div>
+          <div class="field">
+            <label>Location</label>
+            <input type="text" value="${esc(e.location)}" placeholder="e.g. Kuala Lumpur" oninput="updateEntry('exp',${e.id},'location',this.value)" />
+          </div>
+          <div class="field">
+            <label>From (Month/Year) <span class="req">*</span></label>
+            <input type="month" value="${esc(e.from)}" oninput="updateEntry('exp',${e.id},'from',this.value)" />
+          </div>
+          <div class="field">
+            <label>To (Month/Year)</label>
+            <input type="month" value="${esc(e.to)}" oninput="updateEntry('exp',${e.id},'to',this.value)" ${e.current?'disabled':''} />
+          </div>
+          <div class="field" style="justify-content:flex-end;flex-direction:row;align-items:center;gap:8px;padding-top:22px">
+            <input type="checkbox" id="cur-${e.id}" ${e.current?'checked':''} onchange="updateEntry('exp',${e.id},'current',this.checked);renderEntries('exp')" style="width:auto" />
+            <label for="cur-${e.id}" style="text-transform:none;font-size:13px;font-weight:400;cursor:pointer">Currently working here</label>
+          </div>
+          <div class="field span-2">
+            <label>Responsibilities & Achievements</label>
+            <textarea rows="4" placeholder="• Managed social media campaigns reaching 50,000+ followers&#10;• Increased quarterly revenue by 18% through targeted promotions&#10;• Led cross-functional team of 6 for product launch" oninput="updateEntry('exp',${e.id},'description',this.value)">${esc(e.description)}</textarea>
+            <span class="hint">Use bullet points. Lead with action verbs. Include numbers wherever possible.</span>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  } else if (type === 'edu') {
+    wrap.innerHTML = state.eduEntries.map((e, i) => `
+      <div class="entry-card">
+        <span class="entry-num">Education ${i+1}</span>
+        <button class="remove-btn" onclick="removeEntry('edu',${e.id})">×</button>
+        <div class="form-grid" style="margin-top:10px">
+          <div class="field">
+            <label>Qualification / Degree <span class="req">*</span></label>
+            <select oninput="updateEntry('edu',${e.id},'degree',this.value)">
+              <option value="">Select...</option>
+              ${['PhD','Master\'s Degree','Bachelor\'s Degree','Diploma','Foundation','SPM','STPM','Professional Certificate'].map(d=>`<option ${e.degree===d?'selected':''}>${d}</option>`).join('')}
+              <option ${!['PhD','Master\'s Degree','Bachelor\'s Degree','Diploma','Foundation','SPM','STPM','Professional Certificate'].includes(e.degree)&&e.degree?'selected':''} value="${esc(e.degree)}">Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Field of Study</label>
+            <input type="text" value="${esc(e.field)}" placeholder="e.g. Business Administration" oninput="updateEntry('edu',${e.id},'field',this.value)" />
+          </div>
+          <div class="field span-2">
+            <label>Institution / University <span class="req">*</span></label>
+            <input type="text" value="${esc(e.institution)}" placeholder="e.g. Universiti Malaya, Kuala Lumpur" oninput="updateEntry('edu',${e.id},'institution',this.value)" />
+          </div>
+          <div class="field">
+            <label>Year From</label>
+            <input type="number" value="${esc(e.from)}" min="1970" max="2035" placeholder="e.g. 2016" oninput="updateEntry('edu',${e.id},'from',this.value)" />
+          </div>
+          <div class="field">
+            <label>Year To / Graduation Year</label>
+            <input type="number" value="${esc(e.to)}" min="1970" max="2035" placeholder="e.g. 2020" oninput="updateEntry('edu',${e.id},'to',this.value)" />
+          </div>
+          <div class="field">
+            <label>CGPA / Grade <span class="tip">optional</span></label>
+            <input type="text" value="${esc(e.cgpa)}" placeholder="e.g. 3.75 / 4.00" oninput="updateEntry('edu',${e.id},'cgpa',this.value)" />
+          </div>
+        </div>
+      </div>
+    `).join('');
+  } else if (type === 'lang') {
+    wrap.innerHTML = state.langEntries.map((e, i) => `
+      <div class="entry-card">
+        <span class="entry-num">Language ${i+1}</span>
+        <button class="remove-btn" onclick="removeEntry('lang',${e.id})">×</button>
+        <div class="form-grid" style="margin-top:10px">
+          <div class="field">
+            <label>Language</label>
+            <input type="text" value="${esc(e.language)}" placeholder="e.g. Bahasa Malaysia, English, Mandarin, Tamil..." oninput="updateEntry('lang',${e.id},'language',this.value)" />
+          </div>
+          <div class="field">
+            <label>Proficiency Level</label>
+            <select oninput="updateEntry('lang',${e.id},'level',this.value)">
+              ${['','Native / Fluent','Advanced','Intermediate','Basic'].map(l=>`<option ${e.level===l?'selected':''}>${l}</option>`).join('')}
+            </select>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  } else if (type === 'cert') {
+    wrap.innerHTML = state.certEntries.map((e, i) => `
+      <div class="entry-card">
+        <span class="entry-num">Cert ${i+1}</span>
+        <button class="remove-btn" onclick="removeEntry('cert',${e.id})">×</button>
+        <div class="form-grid three" style="margin-top:10px">
+          <div class="field">
+            <label>Certification Name</label>
+            <input type="text" value="${esc(e.name)}" placeholder="e.g. Google Analytics Certification" oninput="updateEntry('cert',${e.id},'name',this.value)" />
+          </div>
+          <div class="field">
+            <label>Issuing Organisation</label>
+            <input type="text" value="${esc(e.issuer)}" placeholder="e.g. Google, HRDF, CIDB" oninput="updateEntry('cert',${e.id},'issuer',this.value)" />
+          </div>
+          <div class="field">
+            <label>Year Obtained</label>
+            <input type="number" value="${esc(e.year)}" min="1990" max="2035" placeholder="e.g. 2023" oninput="updateEntry('cert',${e.id},'year',this.value)" />
+          </div>
+        </div>
+      </div>
+    `).join('');
+  } else if (type === 'ref') {
+    wrap.innerHTML = state.refEntries.map((e, i) => `
+      <div class="entry-card">
+        <span class="entry-num">Reference ${i+1}</span>
+        <button class="remove-btn" onclick="removeEntry('ref',${e.id})">×</button>
+        <div class="form-grid" style="margin-top:10px">
+          <div class="field">
+            <label>Full Name</label>
+            <input type="text" value="${esc(e.name)}" placeholder="e.g. Encik Razif bin Othman" oninput="updateEntry('ref',${e.id},'name',this.value)" />
+          </div>
+          <div class="field">
+            <label>Position / Title</label>
+            <input type="text" value="${esc(e.position)}" placeholder="e.g. Senior Manager" oninput="updateEntry('ref',${e.id},'position',this.value)" />
+          </div>
+          <div class="field">
+            <label>Company</label>
+            <input type="text" value="${esc(e.company)}" placeholder="e.g. ABC Sdn Bhd" oninput="updateEntry('ref',${e.id},'company',this.value)" />
+          </div>
+          <div class="field">
+            <label>Phone</label>
+            <input type="text" value="${esc(e.phone)}" placeholder="e.g. +60 12-000 0000" oninput="updateEntry('ref',${e.id},'phone',this.value)" />
+          </div>
+          <div class="field span-2">
+            <label>Email</label>
+            <input type="email" value="${esc(e.email)}" placeholder="e.g. razif@company.com" oninput="updateEntry('ref',${e.id},'email',this.value)" />
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+}
+
+function updateEntry(type, id, field, value) {
+  const arr = type === 'exp' ? state.expEntries
+    : type === 'edu' ? state.eduEntries
+    : type === 'lang' ? state.langEntries
+    : type === 'cert' ? state.certEntries
+    : state.refEntries;
+  const entry = arr.find(e => e.id === id);
+  if (entry) entry[field] = value;
+}
+
+function esc(v) { return (v||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ── GENERATE RESUME HTML ──
+function buildResume() {
+  const g = id => (document.getElementById(id)||{}).value || '';
+  const name = g('name') || 'Your Name';
+  const jobTitle = g('jobTitle');
+  const email = g('email');
+  const phone = g('phone');
+  const location = g('location');
+  const linkedin = g('linkedin');
+  const nric = g('nric');
+  const nationality = g('nationality');
+  const gender = g('gender');
+  const race = g('race');
+  const marital = g('marital');
+  const dob = g('dob');
+  const summary = g('summary');
+  const awards = g('awards');
+  const volunteer = g('volunteer');
+  const currentSalary = g('currentSalary');
+  const expectedSalary = g('expectedSalary');
+  const notice = g('notice');
+  const relocate = g('relocate');
+
+  let contact = [email,phone,location,linkedin].filter(Boolean).join(' &nbsp;|&nbsp; ');
+  let personalDetails = [
+    nric && `IC: ${nric}`,
+    nationality && `Nationality: ${nationality}`,
+    gender && `Gender: ${gender}`,
+    race && `Race: ${race}`,
+    marital && `Marital Status: ${marital}`,
+    dob && `DOB: ${dob}`,
+  ].filter(Boolean);
+
+  let html = `<div class="rv-header">
+    <div class="rv-name">${name}</div>
+    ${jobTitle ? `<div class="rv-title">${jobTitle}</div>` : ''}
+    <div class="rv-contact">${contact}</div>
+    ${personalDetails.length ? `<div class="rv-contact" style="margin-top:6px;font-size:11px;color:#888">${personalDetails.join(' &nbsp;·&nbsp; ')}</div>` : ''}
+  </div>`;
+
+  // Summary
+  if (summary) {
+    html += `<div class="rv-section">
+      <div class="rv-section-title">Professional Summary</div>
+      <div class="rv-summary">${summary.replace(/\n/g,'<br>')}</div>
+    </div>`;
+  }
+
+  // Skills
+  if (state.hardSkills.length || state.softSkills.length) {
+    const allSkills = [...state.hardSkills, ...state.softSkills];
+    html += `<div class="rv-section">
+      <div class="rv-section-title">Key Skills</div>
+      <div class="rv-skills-grid">${allSkills.map(s=>`<span class="rv-skill">${s}</span>`).join('')}</div>
+    </div>`;
+  }
+
+  // Work Experience
+  if (state.expEntries.length) {
+    html += `<div class="rv-section"><div class="rv-section-title">Work Experience</div>`;
+    state.expEntries.forEach(e => {
+      const fromFormatted = e.from ? fmtMonth(e.from) : '';
+      const toFormatted = e.current ? 'Present' : (e.to ? fmtMonth(e.to) : '');
+      const dateRange = [fromFormatted, toFormatted].filter(Boolean).join(' – ');
+      html += `<div class="rv-exp">
+        <div class="rv-exp-header">
+          <div class="rv-exp-pos">${e.position || 'Position'}</div>
+          <div class="rv-exp-date">${dateRange}</div>
+        </div>
+        <div class="rv-exp-company">${e.company || ''}${e.location ? ` &nbsp;·&nbsp; ${e.location}` : ''}</div>
+        ${e.description ? `<div class="rv-exp-desc">${e.description.replace(/\n/g,'<br>')}</div>` : ''}
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // Education
+  if (state.eduEntries.length) {
+    html += `<div class="rv-section"><div class="rv-section-title">Education</div>`;
+    state.eduEntries.forEach(e => {
+      html += `<div class="rv-edu">
+        <div class="rv-edu-deg">${[e.degree, e.field].filter(Boolean).join(' in ')}</div>
+        <div class="rv-edu-inst">${e.institution || ''}</div>
+        <div class="rv-edu-year">${[e.from, e.to].filter(Boolean).join(' – ')}${e.cgpa ? ` &nbsp;·&nbsp; CGPA: ${e.cgpa}` : ''}</div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // Languages
+  if (state.langEntries.length) {
+    html += `<div class="rv-section">
+      <div class="rv-section-title">Languages</div>
+      <div class="rv-skills-grid">${state.langEntries.map(e=>`<span class="rv-skill">${e.language}${e.level ? ` (${e.level})` : ''}</span>`).join('')}</div>
+    </div>`;
+  }
+
+  // Certifications
+  if (state.certEntries.length) {
+    html += `<div class="rv-section"><div class="rv-section-title">Certifications & Training</div>`;
+    state.certEntries.forEach(e => {
+      html += `<div style="margin-bottom:6px;font-size:12px"><strong>${e.name || 'Certificate'}</strong>${e.issuer?` — ${e.issuer}`:''}${e.year?` (${e.year})`:''}</div>`;
+    });
+    html += `</div>`;
+  }
+
+  // Awards
+  if (awards) {
+    html += `<div class="rv-section">
+      <div class="rv-section-title">Awards & Achievements</div>
+      <div class="rv-summary">${awards.replace(/\n/g,'<br>')}</div>
+    </div>`;
+  }
+
+  // Volunteer
+  if (volunteer) {
+    html += `<div class="rv-section">
+      <div class="rv-section-title">Volunteer & Co-Curriculum</div>
+      <div class="rv-summary">${volunteer.replace(/\n/g,'<br>')}</div>
+    </div>`;
+  }
+
+  // Salary
+  const salaryItems = [
+    currentSalary && `Current Salary: ${currentSalary}`,
+    expectedSalary && `Expected Salary: ${expectedSalary}`,
+    notice && `Availability: ${notice}`,
+    relocate && `Relocation: ${relocate}`,
+  ].filter(Boolean);
+
+  if (salaryItems.length) {
+    html += `<div class="rv-section">
+      <div class="rv-section-title">Additional Information</div>
+      <div class="rv-summary">${salaryItems.join('<br>')}</div>
+    </div>`;
+  }
+
+  // References
+  if (state.refEntries.length) {
+    html += `<div class="rv-section"><div class="rv-section-title">References</div>`;
+    state.refEntries.forEach(e => {
+      html += `<div style="margin-bottom:10px;font-size:12px">
+        <strong>${e.name || ''}</strong>${e.position ? `, ${e.position}` : ''}${e.company ? ` — ${e.company}` : ''}<br>
+        ${e.phone || ''} ${e.email ? `| ${e.email}` : ''}
+      </div>`;
+    });
+    html += `</div>`;
+  } else {
+    html += `<div class="rv-section">
+      <div class="rv-section-title">References</div>
+      <div class="rv-refs">Available upon request.</div>
+    </div>`;
+  }
+
+  return html;
+}
+
+function fmtMonth(ym) {
+  if (!ym) return '';
+  const [y, m] = ym.split('-');
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${months[parseInt(m,10)-1]} ${y}`;
+}
+
+// ── PREVIEW ──
+function previewResume() {
+  document.getElementById('resume-preview').innerHTML = buildResume();
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+}
+
+// ── DOWNLOAD PDF (via print) ──
+function downloadHTML() {
+  const content = buildResume();
+  const win = window.open('', '_blank');
+  win.document.write(`<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Resume</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: Georgia, serif; color: #1a1a1a; padding: 40px 50px; font-size:13px; line-height:1.55; max-width:800px; margin:0 auto; }
+  .rv-header { border-bottom: 3px solid #0D1B2A; padding-bottom:16px; margin-bottom:18px; }
+  .rv-name { font-size:26px; font-weight:bold; color:#0D1B2A; letter-spacing:0.5px; margin-bottom:4px; }
+  .rv-title { font-size:14px; color:#6B6B7B; font-style:italic; margin-bottom:10px; }
+  .rv-contact { display:flex; flex-wrap:wrap; gap:4px 18px; font-size:12px; color:#444; }
+  .rv-section { margin-bottom:16px; }
+  .rv-section-title { font-size:10px; font-weight:bold; text-transform:uppercase; letter-spacing:1.5px; color:#0D1B2A; border-bottom:1.5px solid #C9A84C; padding-bottom:4px; margin-bottom:10px; }
+  .rv-summary { font-size:13px; color:#333; line-height:1.65; }
+  .rv-exp { margin-bottom:12px; }
+  .rv-exp-header { display:flex; justify-content:space-between; }
+  .rv-exp-pos { font-weight:bold; font-size:13px; color:#0D1B2A; }
+  .rv-exp-date { font-size:11px; color:#777; }
+  .rv-exp-company { font-size:12px; color:#555; font-style:italic; margin-bottom:5px; }
+  .rv-exp-desc { font-size:12px; color:#333; white-space:pre-wrap; }
+  .rv-edu { margin-bottom:10px; }
+  .rv-edu-deg { font-weight:bold; font-size:13px; }
+  .rv-edu-inst { font-size:12px; color:#555; font-style:italic; }
+  .rv-edu-year { font-size:11px; color:#777; }
+  .rv-skills-grid { display:flex; flex-wrap:wrap; gap:5px; }
+  .rv-skill { background:#f0ede7; border:1px solid #d8d1c4; font-size:11px; padding:3px 10px; border-radius:12px; color:#333; }
+  .rv-refs { font-size:12px; color:#555; font-style:italic; }
+  @media print {
+    body { padding: 20px 30px; }
+    @page { margin: 1cm; }
+  }
+</style>
+</head>
+<body>
+${content}
+<script>window.onload=()=>{window.print();}<\/script>
+</body></html>`);
+  win.document.close();
+  showToast('📄 Print dialog opened — save as PDF!');
+}
+
+// ── GOOGLE DOCS EXPORT ──
+function exportGoogleDocs() {
+  const content = buildResume();
+  const text = document.createElement('div');
+  text.innerHTML = content;
+  const plain = text.innerText;
+
+  const encoded = encodeURIComponent(plain);
+  const url = `https://docs.google.com/document/create?title=${encodeURIComponent((document.getElementById('name')||{}).value||'My Resume')}&body=${encoded}`;
+
+  // Open Google Docs new doc and show instructions
+  window.open('https://docs.google.com/document/create', '_blank');
+  showToast('📤 Google Docs opened — paste your resume content!');
+
+  // Also copy plain text
+  navigator.clipboard.writeText(plain).catch(()=>{});
+}
+
+// ── CLEAR ALL ──
+function clearAll() {
+  if (!confirm('Clear all entered data? This cannot be undone.')) return;
+  document.querySelectorAll('input,textarea,select').forEach(el => {
+    if (el.type === 'checkbox') el.checked = false;
+    else el.value = '';
+  });
+  state.hardSkills = []; state.softSkills = [];
+  state.expEntries = []; state.eduEntries = [];
+  state.langEntries = []; state.certEntries = [];
+  state.refEntries = [];
+  renderTags('hard'); renderTags('soft');
+  ['exp','edu','lang','cert','ref'].forEach(renderEntries);
+  showToast('🗑 All data cleared');
+}
+
+// ── TOAST ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+// ── INIT: pre-add one entry each ──
+window.onload = () => {
+  addEntry('exp');
+  addEntry('edu');
+  addEntry('lang');
+  // Open first sections
+  document.querySelectorAll('.section-header')[0].click(); // close personal (already open)
+  document.querySelectorAll('.section-header')[0].click(); // reopen
+};
+
+// Close modal on overlay click
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+</script>
+
+</body>
+</html>
