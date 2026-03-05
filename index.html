@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Malaysia Resume Creator</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docx/8.5.0/docx.umd.min.js"></script>
 <style>
   :root {
     --navy: #0D1B2A;
@@ -1077,11 +1078,12 @@
   <div class="generate-bar">
     <div class="generate-bar-left">
       <h3>Ready to Generate?</h3>
-      <p>Preview your resume, then download as PDF or export to Google Docs.</p>
+      <p>Preview your resume, download as PDF, or export as Word (.docx) to Google Drive.</p>
     </div>
     <div class="generate-btns">
       <button class="btn btn-outline" onclick="clearAll()">🗑 Clear All</button>
       <button class="btn btn-gold" onclick="previewResume()">👁 Preview Resume</button>
+      <button class="btn btn-outline" onclick="downloadDocx()">📝 Export .docx</button>
       <button class="btn btn-primary" onclick="downloadHTML()">⬇ Download PDF</button>
     </div>
   </div>
@@ -1098,7 +1100,7 @@
     <div id="resume-preview"></div>
     <div class="modal-actions">
       <button class="btn btn-outline" onclick="closeModal()">✕ Close</button>
-      <button class="btn btn-gold" onclick="exportGoogleDocs()">📤 Open in Google Docs</button>
+      <button class="btn btn-gold" onclick="downloadDocx()">📝 Export .docx (Google Drive)</button>
       <button class="btn btn-primary" onclick="downloadHTML()">⬇ Download PDF</button>
     </div>
   </div>
@@ -1578,21 +1580,242 @@ ${content}
 }
 
 // ── GOOGLE DOCS EXPORT ──
-function exportGoogleDocs() {
-  const content = buildResume();
-  const text = document.createElement('div');
-  text.innerHTML = content;
-  const plain = text.innerText;
+// ── EXPORT DOCX (real Word format, uploadable to Google Drive) ──
+async function downloadDocx() {
+  const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, BorderStyle, Table, TableRow, TableCell, WidthType, ShadingType } = docx;
 
-  const encoded = encodeURIComponent(plain);
-  const url = `https://docs.google.com/document/create?title=${encodeURIComponent((document.getElementById('name')||{}).value||'My Resume')}&body=${encoded}`;
+  const g = id => (document.getElementById(id)||{}).value || '';
+  const name = g('name') || 'Your Name';
+  const jobTitle = g('jobTitle');
+  const email = g('email');
+  const phone = g('phone');
+  const location = g('location');
+  const linkedin = g('linkedin');
+  const nric = g('nric');
+  const nationality = g('nationality');
+  const gender = g('gender');
+  const race = g('race');
+  const marital = g('marital');
+  const dob = g('dob');
+  const summary = g('summary');
+  const awards = g('awards');
+  const volunteer = g('volunteer');
+  const currentSalary = g('currentSalary');
+  const expectedSalary = g('expectedSalary');
+  const notice = g('notice');
+  const relocate = g('relocate');
 
-  // Open Google Docs new doc and show instructions
-  window.open('https://docs.google.com/document/create', '_blank');
-  showToast('📤 Google Docs opened — paste your resume content!');
+  const NAVY = '0D1B2A';
+  const GOLD = 'C9A84C';
 
-  // Also copy plain text
-  navigator.clipboard.writeText(plain).catch(()=>{});
+  const sectionTitle = (text) => new Paragraph({
+    children: [new TextRun({ text: text.toUpperCase(), bold: true, color: NAVY, size: 20, font: 'Georgia' })],
+    border: { bottom: { style: BorderStyle.SINGLE, size: 6, color: GOLD } },
+    spacing: { before: 240, after: 100 },
+  });
+
+  const boldLine = (text) => new Paragraph({
+    children: [new TextRun({ text, bold: true, size: 22, color: NAVY, font: 'Georgia' })],
+    spacing: { before: 60, after: 20 },
+  });
+
+  const normalLine = (text, opts={}) => new Paragraph({
+    children: [new TextRun({ text, size: 20, color: opts.muted ? '777777' : '333333', italics: opts.italic || false, font: 'Calibri' })],
+    spacing: { before: 20, after: 20 },
+  });
+
+  const bulletLine = (text) => new Paragraph({
+    children: [new TextRun({ text, size: 20, font: 'Calibri', color: '333333' })],
+    bullet: { level: 0 },
+    spacing: { before: 10, after: 10 },
+  });
+
+  const children = [];
+
+  // ── NAME & CONTACT ──
+  children.push(new Paragraph({
+    children: [new TextRun({ text: name, bold: true, size: 52, color: NAVY, font: 'Georgia' })],
+    alignment: AlignmentType.CENTER,
+    spacing: { after: 60 },
+  }));
+
+  if (jobTitle) children.push(new Paragraph({
+    children: [new TextRun({ text: jobTitle, size: 24, italics: true, color: '555555', font: 'Calibri' })],
+    alignment: AlignmentType.CENTER,
+    spacing: { after: 40 },
+  }));
+
+  const contactParts = [email, phone, location, linkedin].filter(Boolean).join('   |   ');
+  if (contactParts) children.push(new Paragraph({
+    children: [new TextRun({ text: contactParts, size: 18, color: '444444', font: 'Calibri' })],
+    alignment: AlignmentType.CENTER,
+    spacing: { after: 40 },
+  }));
+
+  const personalParts = [
+    nric && `IC: ${nric}`,
+    nationality && `Nationality: ${nationality}`,
+    gender && `Gender: ${gender}`,
+    race && `Race: ${race}`,
+    marital && `Marital: ${marital}`,
+    dob && `DOB: ${dob}`,
+  ].filter(Boolean).join('   ·   ');
+
+  if (personalParts) children.push(new Paragraph({
+    children: [new TextRun({ text: personalParts, size: 16, color: '999999', font: 'Calibri' })],
+    alignment: AlignmentType.CENTER,
+    spacing: { after: 80 },
+  }));
+
+  // ── SUMMARY ──
+  if (summary) {
+    children.push(sectionTitle('Professional Summary'));
+    summary.split('\n').forEach(line => line.trim() && children.push(normalLine(line)));
+  }
+
+  // ── SKILLS ──
+  if (state.hardSkills.length || state.softSkills.length) {
+    children.push(sectionTitle('Key Skills'));
+    if (state.hardSkills.length) {
+      children.push(new Paragraph({
+        children: [
+          new TextRun({ text: 'Technical: ', bold: true, size: 20, font: 'Calibri' }),
+          new TextRun({ text: state.hardSkills.join(', '), size: 20, font: 'Calibri' }),
+        ],
+        spacing: { before: 40, after: 20 },
+      }));
+    }
+    if (state.softSkills.length) {
+      children.push(new Paragraph({
+        children: [
+          new TextRun({ text: 'Soft Skills: ', bold: true, size: 20, font: 'Calibri' }),
+          new TextRun({ text: state.softSkills.join(', '), size: 20, font: 'Calibri' }),
+        ],
+        spacing: { before: 20, after: 20 },
+      }));
+    }
+  }
+
+  // ── WORK EXPERIENCE ──
+  if (state.expEntries.length) {
+    children.push(sectionTitle('Work Experience'));
+    state.expEntries.forEach(e => {
+      const fromF = e.from ? fmtMonth(e.from) : '';
+      const toF = e.current ? 'Present' : (e.to ? fmtMonth(e.to) : '');
+      const dateRange = [fromF, toF].filter(Boolean).join(' – ');
+      children.push(new Paragraph({
+        children: [
+          new TextRun({ text: e.position || 'Position', bold: true, size: 22, color: NAVY, font: 'Georgia' }),
+          new TextRun({ text: `   ${dateRange}`, size: 18, color: '777777', font: 'Calibri' }),
+        ],
+        spacing: { before: 120, after: 20 },
+      }));
+      if (e.company) children.push(new Paragraph({
+        children: [new TextRun({ text: `${e.company}${e.location ? '  ·  ' + e.location : ''}`, italics: true, size: 20, color: '555555', font: 'Calibri' })],
+        spacing: { after: 30 },
+      }));
+      if (e.description) {
+        e.description.split('\n').forEach(line => {
+          if (line.trim()) {
+            const clean = line.replace(/^[•\-\*]\s*/, '');
+            children.push(bulletLine(clean));
+          }
+        });
+      }
+    });
+  }
+
+  // ── EDUCATION ──
+  if (state.eduEntries.length) {
+    children.push(sectionTitle('Education'));
+    state.eduEntries.forEach(e => {
+      const degreeField = [e.degree, e.field].filter(Boolean).join(' in ');
+      children.push(boldLine(degreeField || 'Qualification'));
+      if (e.institution) children.push(normalLine(e.institution, { italic: true }));
+      const eduMeta = [e.from && e.to ? `${e.from} – ${e.to}` : (e.from||e.to), e.cgpa && `CGPA: ${e.cgpa}`].filter(Boolean).join('   ·   ');
+      if (eduMeta) children.push(normalLine(eduMeta, { muted: true }));
+    });
+  }
+
+  // ── LANGUAGES ──
+  if (state.langEntries.length) {
+    children.push(sectionTitle('Languages'));
+    children.push(new Paragraph({
+      children: state.langEntries.map((e, i) => new TextRun({
+        text: `${e.language}${e.level ? ` (${e.level})` : ''}${i < state.langEntries.length-1 ? '   ·   ' : ''}`,
+        size: 20, font: 'Calibri',
+      })),
+      spacing: { before: 40, after: 40 },
+    }));
+  }
+
+  // ── CERTIFICATIONS ──
+  if (state.certEntries.length) {
+    children.push(sectionTitle('Certifications & Training'));
+    state.certEntries.forEach(e => {
+      children.push(new Paragraph({
+        children: [
+          new TextRun({ text: e.name || 'Certificate', bold: true, size: 20, font: 'Calibri' }),
+          new TextRun({ text: e.issuer ? `  —  ${e.issuer}` : '', size: 20, font: 'Calibri', color: '555555' }),
+          new TextRun({ text: e.year ? `  (${e.year})` : '', size: 18, font: 'Calibri', color: '999999' }),
+        ],
+        spacing: { before: 40, after: 20 },
+      }));
+    });
+  }
+
+  // ── AWARDS ──
+  if (awards) {
+    children.push(sectionTitle('Awards & Achievements'));
+    awards.split('\n').forEach(line => line.trim() && children.push(normalLine(line)));
+  }
+
+  // ── VOLUNTEER ──
+  if (volunteer) {
+    children.push(sectionTitle('Volunteer & Co-Curriculum'));
+    volunteer.split('\n').forEach(line => line.trim() && children.push(normalLine(line)));
+  }
+
+  // ── SALARY / AVAILABILITY ──
+  const salaryItems = [
+    currentSalary && `Current Salary: ${currentSalary}`,
+    expectedSalary && `Expected Salary: ${expectedSalary}`,
+    notice && `Availability: ${notice}`,
+    relocate && `Relocation: ${relocate}`,
+  ].filter(Boolean);
+
+  if (salaryItems.length) {
+    children.push(sectionTitle('Additional Information'));
+    salaryItems.forEach(s => children.push(normalLine(s)));
+  }
+
+  // ── REFERENCES ──
+  children.push(sectionTitle('References'));
+  if (state.refEntries.length) {
+    state.refEntries.forEach(e => {
+      children.push(boldLine(`${e.name || ''}${e.position ? ', ' + e.position : ''}${e.company ? ' — ' + e.company : ''}`));
+      const refContact = [e.phone, e.email].filter(Boolean).join('   |   ');
+      if (refContact) children.push(normalLine(refContact, { muted: true }));
+    });
+  } else {
+    children.push(normalLine('Available upon request.', { italic: true, muted: true }));
+  }
+
+  // ── BUILD DOC ──
+  const doc = new Document({
+    sections: [{ properties: { page: { margin: { top: 720, right: 900, bottom: 720, left: 900 } } }, children }],
+    creator: 'Malaysia Resume Creator by AhChai',
+    title: `${name} — Resume`,
+  });
+
+  const blob = await Packer.toBlob(doc);
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${name.replace(/\s+/g,'_')}_Resume.docx`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('📝 .docx downloaded! Upload to Google Drive → Open with Google Docs ✅');
 }
 
 // ── CLEAR ALL ──
