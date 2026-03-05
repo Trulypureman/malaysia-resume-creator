@@ -8,7 +8,7 @@ A free, browser-based resume builder designed specifically for the **Malaysian j
 
 ## 🌐 Live Demo
 
-👉 [**Open Malaysia Resume Creator**](https://yourusername.github.io/malaysia-resume-creator)
+👉 [**Open Malaysia Resume Creator**](https://trulypureman.github.io/malaysia-resume-creator)
 
 ---
 
