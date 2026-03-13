@@ -3,9 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Malaysia Resume Creator</title>
+<title>Malaysia Resume Creator v2</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/8.5.0/docx.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
   :root {
     --navy: #0D1B2A;
@@ -725,14 +727,112 @@
   .toast.show { transform: translateY(0); opacity: 1; }
 
   /* ── FOOTER ── */
-  footer {
-    text-align: center;
-    padding: 30px 20px;
+  /* ── DRAG & DROP ── */
+  .form-section[draggable="true"] { cursor: grab; }
+  .form-section.drag-over {
+    outline: 2px dashed var(--gold);
+    outline-offset: 2px;
+    background: rgba(201,168,76,0.04);
+  }
+  .form-section.dragging { opacity: 0.4; }
+  .drag-handle {
     color: var(--muted);
+    font-size: 16px;
+    cursor: grab;
+    padding: 0 4px;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+    user-select: none;
+    letter-spacing: -2px;
+  }
+  .drag-handle:hover { opacity: 1; color: var(--gold); }
+
+  /* ── TEMPLATE TOGGLE ── */
+  .template-toggle-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+  }
+  .template-toggle-bar label {
     font-size: 12px;
-    border-top: 1px solid var(--border);
+    font-weight: 700;
+    color: var(--navy);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  .template-btns {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .tpl-btn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    border: 1.5px solid var(--border);
+    background: var(--cream);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tpl-btn:hover { border-color: var(--navy); background: var(--white); }
+  .tpl-btn.active {
+    background: var(--navy);
+    color: var(--white);
+    border-color: var(--navy);
+  }
+  .tpl-preview {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+  }
+  .tpl-preview span {
+    display: block;
+    width: 14px;
+    height: 14px;
+    border-radius: 2px;
   }
 
+  /* ── MODERN MINIMAL PREVIEW TEMPLATE ── */
+  .rv-modern { font-family: 'Calibri', 'Arial', sans-serif; color: #1a1a1a; font-size: 13px; line-height: 1.5; }
+  .rv-modern .rv-header { border-bottom: none; padding-bottom: 0; margin-bottom: 0; display: flex; gap: 0; }
+  .rv-modern .rv-sidebar {
+    width: 34%;
+    background: #0D1B2A;
+    color: #fff;
+    padding: 28px 18px;
+    border-radius: 0;
+    flex-shrink: 0;
+  }
+  .rv-modern .rv-main { flex: 1; padding: 28px 22px; }
+  .rv-modern .rv-name { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .rv-modern .rv-title { font-size: 12px; color: #C9A84C; font-style: normal; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; }
+  .rv-modern .rv-contact { flex-direction: column; gap: 5px; font-size: 11px; color: rgba(255,255,255,0.75); }
+  .rv-modern .rv-section-title {
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
+    color: #0D1B2A; border-left: 3px solid #C9A84C; padding-left: 8px;
+    border-bottom: none; margin-bottom: 10px; padding-bottom: 0;
+  }
+  .rv-modern .rv-sidebar-section-title {
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
+    color: #C9A84C; margin-bottom: 8px; margin-top: 18px;
+  }
+  .rv-modern .rv-sidebar-section-title:first-child { margin-top: 0; }
+  .rv-modern .rv-skill { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: #fff; }
+  .rv-modern .rv-refs { color: rgba(255,255,255,0.6); }
+
+  footer { text-align: center; padding: 30px 20px; color: var(--muted); font-size: 12px; border-top: 1px solid var(--border); }
   footer a { color: var(--navy); text-decoration: none; font-weight: 600; }
 </style>
 </head>
@@ -762,9 +862,26 @@
 <!-- MAIN FORM -->
 <div class="container">
 
+<!-- TEMPLATE TOGGLE -->
+  <div class="template-toggle-bar">
+    <label>Resume Template:</label>
+    <div class="template-btns">
+      <button class="tpl-btn active" id="tpl-corporate" onclick="setTemplate('corporate')">
+        <div class="tpl-preview"><span style="background:#0D1B2A"></span><span style="background:#C9A84C;width:8px"></span></div>
+        Corporate Classic
+      </button>
+      <button class="tpl-btn" id="tpl-modern" onclick="setTemplate('modern')">
+        <div class="tpl-preview"><span style="background:#0D1B2A;width:5px;height:14px"></span><span style="background:#f5f5f5;border:1px solid #ddd"></span></div>
+        Modern Minimal
+      </button>
+    </div>
+    <span style="font-size:11px;color:var(--muted);margin-left:auto">⠿ Drag sections to reorder</span>
+  </div>
+
   <!-- PERSONAL INFO -->
-  <div class="form-section">
+  <div class="form-section" draggable="true" data-section="personal" id="sec-personal">
     <div class="section-header" onclick="toggle(this)">
+      <span class="drag-handle" title="Drag to reorder">⠿⠿</span>
       <div class="section-icon">👤</div>
       <div class="section-title-wrap">
         <div class="section-title">Personal Information</div>
@@ -851,8 +968,9 @@
   </div>
 
   <!-- EXECUTIVE SUMMARY -->
-  <div class="form-section">
+  <div class="form-section" draggable="true" data-section="summary" id="sec-summary">
     <div class="section-header" onclick="toggle(this)">
+      <span class="drag-handle" title="Drag to reorder">⠿⠿</span>
       <div class="section-icon">✍️</div>
       <div class="section-title-wrap">
         <div class="section-title">Professional Summary / Executive Summary</div>
@@ -871,8 +989,9 @@
   </div>
 
   <!-- WORK EXPERIENCE -->
-  <div class="form-section">
+  <div class="form-section" draggable="true" data-section="exp" id="sec-exp">
     <div class="section-header" onclick="toggle(this)">
+      <span class="drag-handle" title="Drag to reorder">⠿⠿</span>
       <div class="section-icon">💼</div>
       <div class="section-title-wrap">
         <div class="section-title">Work Experience</div>
@@ -889,8 +1008,9 @@
   </div>
 
   <!-- EDUCATION -->
-  <div class="form-section">
+  <div class="form-section" draggable="true" data-section="edu" id="sec-edu">
     <div class="section-header" onclick="toggle(this)">
+      <span class="drag-handle" title="Drag to reorder">⠿⠿</span>
       <div class="section-icon">🎓</div>
       <div class="section-title-wrap">
         <div class="section-title">Education</div>
@@ -906,8 +1026,9 @@
   </div>
 
   <!-- SKILLS -->
-  <div class="form-section">
+  <div class="form-section" draggable="true" data-section="skills" id="sec-skills">
     <div class="section-header" onclick="toggle(this)">
+      <span class="drag-handle" title="Drag to reorder">⠿⠿</span>
       <div class="section-icon">⚡</div>
       <div class="section-title-wrap">
         <div class="section-title">Skills</div>
@@ -940,8 +1061,9 @@
   </div>
 
   <!-- LANGUAGES -->
-  <div class="form-section">
+  <div class="form-section" draggable="true" data-section="lang" id="sec-lang">
     <div class="section-header" onclick="toggle(this)">
+      <span class="drag-handle" title="Drag to reorder">⠿⠿</span>
       <div class="section-icon">🗣️</div>
       <div class="section-title-wrap">
         <div class="section-title">Languages</div>
@@ -957,8 +1079,9 @@
   </div>
 
   <!-- CERTIFICATIONS -->
-  <div class="form-section">
+  <div class="form-section" draggable="true" data-section="cert" id="sec-cert">
     <div class="section-header" onclick="toggle(this)">
+      <span class="drag-handle" title="Drag to reorder">⠿⠿</span>
       <div class="section-icon">🏅</div>
       <div class="section-title-wrap">
         <div class="section-title">Certifications & Professional Training</div>
@@ -974,8 +1097,9 @@
   </div>
 
   <!-- AWARDS -->
-  <div class="form-section">
+  <div class="form-section" draggable="true" data-section="awards" id="sec-awards">
     <div class="section-header" onclick="toggle(this)">
+      <span class="drag-handle" title="Drag to reorder">⠿⠿</span>
       <div class="section-icon">🏆</div>
       <div class="section-title-wrap">
         <div class="section-title">Awards & Achievements</div>
@@ -993,8 +1117,9 @@
   </div>
 
   <!-- VOLUNTEER / CO-CURRICULUM -->
-  <div class="form-section">
+  <div class="form-section" draggable="true" data-section="volunteer" id="sec-volunteer">
     <div class="section-header" onclick="toggle(this)">
+      <span class="drag-handle" title="Drag to reorder">⠿⠿</span>
       <div class="section-icon">🤝</div>
       <div class="section-title-wrap">
         <div class="section-title">Volunteer Work & Co-Curriculum Activities</div>
@@ -1012,8 +1137,9 @@
   </div>
 
   <!-- EXPECTED SALARY -->
-  <div class="form-section">
+  <div class="form-section" draggable="true" data-section="salary" id="sec-salary">
     <div class="section-header" onclick="toggle(this)">
+      <span class="drag-handle" title="Drag to reorder">⠿⠿</span>
       <div class="section-icon">💰</div>
       <div class="section-title-wrap">
         <div class="section-title">Expected Salary & Availability</div>
@@ -1057,8 +1183,9 @@
   </div>
 
   <!-- REFERENCES -->
-  <div class="form-section">
+  <div class="form-section" draggable="true" data-section="ref" id="sec-ref">
     <div class="section-header" onclick="toggle(this)">
+      <span class="drag-handle" title="Drag to reorder">⠿⠿</span>
       <div class="section-icon">📋</div>
       <div class="section-title-wrap">
         <div class="section-title">References</div>
@@ -1074,21 +1201,23 @@
     </div>
   </div>
 
-  <!-- GENERATE BAR -->
   <div class="generate-bar">
     <div class="generate-bar-left">
-      <h3>Ready to Generate?</h3>
-      <p>Preview your resume, download as PDF, or export as Word (.docx) to Google Drive.</p>
+      <h3>Ready to Generate? <span style="font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;background:var(--gold);color:var(--navy);padding:2px 8px;border-radius:10px;vertical-align:middle;margin-left:6px">v2</span></h3>
+      <p>Preview, export as PDF (jsPDF), or download as Word (.docx).</p>
     </div>
     <div class="generate-btns">
       <button class="btn btn-outline" onclick="clearAll()">🗑 Clear All</button>
       <button class="btn btn-gold" onclick="previewResume()">👁 Preview Resume</button>
       <button class="btn btn-outline" onclick="downloadDocx()">📝 Export .docx</button>
-      <button class="btn btn-primary" onclick="downloadHTML()">⬇ Download PDF</button>
+      <button class="btn btn-primary" onclick="downloadPDF()">⬇ Download PDF</button>
     </div>
   </div>
 
 </div>
+
+<!-- HIDDEN PDF RENDER TARGET -->
+<div id="pdf-render" style="display:none;position:fixed;top:0;left:0;width:794px;background:#fff;padding:40px 50px;font-family:Georgia,serif;color:#1a1a1a;font-size:13px;line-height:1.55;z-index:-9999"></div>
 
 <!-- MODAL -->
 <div class="modal-overlay" id="modal">
@@ -1101,7 +1230,7 @@
     <div class="modal-actions">
       <button class="btn btn-outline" onclick="closeModal()">✕ Close</button>
       <button class="btn btn-gold" onclick="downloadDocx()">📝 Export .docx (Google Drive)</button>
-      <button class="btn btn-primary" onclick="downloadHTML()">⬇ Download PDF</button>
+      <button class="btn btn-primary" onclick="downloadPDF()">⬇ Download PDF</button>
     </div>
   </div>
 </div>
@@ -1523,9 +1652,20 @@ function fmtMonth(ym) {
   return `${months[parseInt(m,10)-1]} ${y}`;
 }
 
+// ── TEMPLATE STATE ──
+let currentTemplate = 'corporate';
+
+function setTemplate(tpl) {
+  currentTemplate = tpl;
+  document.getElementById('tpl-corporate').classList.toggle('active', tpl === 'corporate');
+  document.getElementById('tpl-modern').classList.toggle('active', tpl === 'modern');
+  showToast(tpl === 'corporate' ? '📄 Corporate Classic selected' : '✨ Modern Minimal selected');
+}
+
 // ── PREVIEW ──
 function previewResume() {
-  document.getElementById('resume-preview').innerHTML = buildResume();
+  const html = currentTemplate === 'modern' ? buildResumeModern() : buildResume();
+  document.getElementById('resume-preview').innerHTML = html;
   document.getElementById('modal').classList.add('open');
 }
 
@@ -1533,53 +1673,273 @@ function closeModal() {
   document.getElementById('modal').classList.remove('open');
 }
 
-// ── DOWNLOAD PDF (via print) ──
-function downloadHTML() {
-  const content = buildResume();
-  const win = window.open('', '_blank');
-  win.document.write(`<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Resume</title>
-<style>
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family: Georgia, serif; color: #1a1a1a; padding: 40px 50px; font-size:13px; line-height:1.55; max-width:800px; margin:0 auto; }
-  .rv-header { border-bottom: 3px solid #0D1B2A; padding-bottom:16px; margin-bottom:18px; }
-  .rv-name { font-size:26px; font-weight:bold; color:#0D1B2A; letter-spacing:0.5px; margin-bottom:4px; }
-  .rv-title { font-size:14px; color:#6B6B7B; font-style:italic; margin-bottom:10px; }
-  .rv-contact { display:flex; flex-wrap:wrap; gap:4px 18px; font-size:12px; color:#444; }
-  .rv-section { margin-bottom:16px; }
-  .rv-section-title { font-size:10px; font-weight:bold; text-transform:uppercase; letter-spacing:1.5px; color:#0D1B2A; border-bottom:1.5px solid #C9A84C; padding-bottom:4px; margin-bottom:10px; }
-  .rv-summary { font-size:13px; color:#333; line-height:1.65; }
-  .rv-exp { margin-bottom:12px; }
-  .rv-exp-header { display:flex; justify-content:space-between; }
-  .rv-exp-pos { font-weight:bold; font-size:13px; color:#0D1B2A; }
-  .rv-exp-date { font-size:11px; color:#777; }
-  .rv-exp-company { font-size:12px; color:#555; font-style:italic; margin-bottom:5px; }
-  .rv-exp-desc { font-size:12px; color:#333; white-space:pre-wrap; }
-  .rv-edu { margin-bottom:10px; }
-  .rv-edu-deg { font-weight:bold; font-size:13px; }
-  .rv-edu-inst { font-size:12px; color:#555; font-style:italic; }
-  .rv-edu-year { font-size:11px; color:#777; }
-  .rv-skills-grid { display:flex; flex-wrap:wrap; gap:5px; }
-  .rv-skill { background:#f0ede7; border:1px solid #d8d1c4; font-size:11px; padding:3px 10px; border-radius:12px; color:#333; }
-  .rv-refs { font-size:12px; color:#555; font-style:italic; }
-  @media print {
-    body { padding: 20px 30px; }
-    @page { margin: 1cm; }
+// ── DOWNLOAD PDF (jsPDF) ──
+async function downloadPDF() {
+  const g = id => (document.getElementById(id)||{}).value || '';
+  const name = g('name') || 'Resume';
+
+  showToast('⏳ Generating PDF...');
+
+  // Build resume in hidden render div
+  const renderDiv = document.getElementById('pdf-render');
+  renderDiv.innerHTML = currentTemplate === 'modern' ? buildResumeModern() : buildResume();
+  renderDiv.style.display = 'block';
+
+  await new Promise(r => setTimeout(r, 200));
+
+  try {
+    const { jsPDF } = window.jspdf;
+    const canvas = await html2canvas(renderDiv, {
+      scale: 2,
+      useCORS: true,
+      logging: false,
+      backgroundColor: '#ffffff',
+    });
+
+    const imgData = canvas.toDataURL('image/jpeg', 0.92);
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const pageW = pdf.internal.pageSize.getWidth();
+    const pageH = pdf.internal.pageSize.getHeight();
+    const imgW = pageW;
+    const imgH = (canvas.height * pageW) / canvas.width;
+
+    let yPos = 0;
+    let remainingH = imgH;
+
+    while (remainingH > 0) {
+      pdf.addImage(imgData, 'JPEG', 0, -yPos, imgW, imgH);
+      remainingH -= pageH;
+      yPos += pageH;
+      if (remainingH > 0) pdf.addPage();
+    }
+
+    pdf.save(`${name.replace(/\s+/g,'_')}_Resume.pdf`);
+    showToast('✅ PDF downloaded successfully!');
+  } catch (err) {
+    showToast('❌ PDF failed — try Preview then print to PDF');
+    console.error(err);
+  } finally {
+    renderDiv.style.display = 'none';
+    renderDiv.innerHTML = '';
   }
-</style>
-</head>
-<body>
-${content}
-<script>window.onload=()=>{window.print();}<\/script>
-</body></html>`);
-  win.document.close();
-  showToast('📄 Print dialog opened — save as PDF!');
 }
 
-// ── GOOGLE DOCS EXPORT ──
+// ── OLD downloadHTML kept as fallback ──
+function downloadHTML() { downloadPDF(); }
+
+// ── DRAG AND DROP ──
+let dragSrc = null;
+
+function initDragAndDrop() {
+  const container = document.querySelector('.container');
+
+  container.addEventListener('dragstart', e => {
+    const sec = e.target.closest('.form-section[draggable]');
+    if (!sec) return;
+    // Only start drag if handle was grabbed
+    if (!e.target.classList.contains('drag-handle')) {
+      // Still allow drag from section header area
+    }
+    dragSrc = sec;
+    sec.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', sec.dataset.section);
+  });
+
+  container.addEventListener('dragend', e => {
+    const sec = e.target.closest('.form-section[draggable]');
+    if (!sec) return;
+    sec.classList.remove('dragging');
+    document.querySelectorAll('.form-section.drag-over').forEach(el => el.classList.remove('drag-over'));
+    dragSrc = null;
+  });
+
+  container.addEventListener('dragover', e => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    const sec = e.target.closest('.form-section[draggable]');
+    if (!sec || sec === dragSrc) return;
+    document.querySelectorAll('.form-section.drag-over').forEach(el => el.classList.remove('drag-over'));
+    sec.classList.add('drag-over');
+  });
+
+  container.addEventListener('dragleave', e => {
+    const sec = e.target.closest('.form-section[draggable]');
+    if (sec) sec.classList.remove('drag-over');
+  });
+
+  container.addEventListener('drop', e => {
+    e.preventDefault();
+    const target = e.target.closest('.form-section[draggable]');
+    if (!target || !dragSrc || target === dragSrc) return;
+    target.classList.remove('drag-over');
+
+    // Determine position relative to target
+    const rect = target.getBoundingClientRect();
+    const midY = rect.top + rect.height / 2;
+    if (e.clientY < midY) {
+      container.insertBefore(dragSrc, target);
+    } else {
+      target.after(dragSrc);
+    }
+    showToast('↕ Section reordered');
+  });
+}
+
+// ── MODERN MINIMAL RESUME BUILDER ──
+function buildResumeModern() {
+  const g = id => (document.getElementById(id)||{}).value || '';
+  const name = g('name') || 'Your Name';
+  const jobTitle = g('jobTitle');
+  const email = g('email');
+  const phone = g('phone');
+  const location = g('location');
+  const linkedin = g('linkedin');
+  const nric = g('nric');
+  const nationality = g('nationality');
+  const gender = g('gender');
+  const race = g('race');
+  const marital = g('marital');
+  const dob = g('dob');
+  const summary = g('summary');
+  const awards = g('awards');
+  const volunteer = g('volunteer');
+  const currentSalary = g('currentSalary');
+  const expectedSalary = g('expectedSalary');
+  const notice = g('notice');
+  const relocate = g('relocate');
+
+  // --- SIDEBAR ---
+  let sidebar = `
+    <div class="rv-modern rv-sidebar">
+      <div class="rv-name">${name}</div>
+      ${jobTitle ? `<div class="rv-title">${jobTitle}</div>` : ''}
+      <div class="rv-contact">
+        ${email ? `<span>✉ ${email}</span>` : ''}
+        ${phone ? `<span>📞 ${phone}</span>` : ''}
+        ${location ? `<span>📍 ${location}</span>` : ''}
+        ${linkedin ? `<span>🔗 ${linkedin}</span>` : ''}
+      </div>`;
+
+  const personalDetails = [
+    nric && `IC: ${nric}`,
+    nationality && nationality,
+    gender && gender,
+    race && race,
+    marital && marital,
+    dob && `DOB: ${dob}`,
+  ].filter(Boolean);
+  if (personalDetails.length) {
+    sidebar += `<div class="rv-sidebar-section-title">Personal Details</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.7);line-height:1.8">${personalDetails.join('<br>')}</div>`;
+  }
+
+  if (state.hardSkills.length || state.softSkills.length) {
+    sidebar += `<div class="rv-sidebar-section-title">Skills</div><div class="rv-skills-grid rv-modern">`;
+    [...state.hardSkills, ...state.softSkills].forEach(s => {
+      sidebar += `<span class="rv-skill">${s}</span>`;
+    });
+    sidebar += `</div>`;
+  }
+
+  if (state.langEntries.length) {
+    sidebar += `<div class="rv-sidebar-section-title">Languages</div>`;
+    state.langEntries.forEach(e => {
+      sidebar += `<div style="font-size:11px;color:rgba(255,255,255,0.8);margin-bottom:4px">${e.language}${e.level ? ` — <em style="color:#C9A84C">${e.level}</em>` : ''}</div>`;
+    });
+  }
+
+  const salaryItems = [
+    currentSalary && `Current: ${currentSalary}`,
+    expectedSalary && `Expected: ${expectedSalary}`,
+    notice && `Notice: ${notice}`,
+    relocate && `Relocate: ${relocate}`,
+  ].filter(Boolean);
+  if (salaryItems.length) {
+    sidebar += `<div class="rv-sidebar-section-title">Availability</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.75);line-height:1.8">${salaryItems.join('<br>')}</div>`;
+  }
+
+  sidebar += `</div>`;
+
+  // --- MAIN ---
+  let main = `<div class="rv-main">`;
+
+  if (summary) {
+    main += `<div class="rv-section">
+      <div class="rv-section-title rv-modern">Professional Summary</div>
+      <div class="rv-summary">${summary.replace(/\n/g,'<br>')}</div>
+    </div>`;
+  }
+
+  if (state.expEntries.length) {
+    main += `<div class="rv-section"><div class="rv-section-title rv-modern">Work Experience</div>`;
+    state.expEntries.forEach(e => {
+      const fromF = e.from ? fmtMonth(e.from) : '';
+      const toF = e.current ? 'Present' : (e.to ? fmtMonth(e.to) : '');
+      const dateRange = [fromF, toF].filter(Boolean).join(' – ');
+      main += `<div class="rv-exp">
+        <div class="rv-exp-header">
+          <div class="rv-exp-pos">${e.position || 'Position'}</div>
+          <div class="rv-exp-date">${dateRange}</div>
+        </div>
+        <div class="rv-exp-company">${e.company || ''}${e.location ? ` &nbsp;·&nbsp; ${e.location}` : ''}</div>
+        ${e.description ? `<div class="rv-exp-desc">${e.description.replace(/\n/g,'<br>')}</div>` : ''}
+      </div>`;
+    });
+    main += `</div>`;
+  }
+
+  if (state.eduEntries.length) {
+    main += `<div class="rv-section"><div class="rv-section-title rv-modern">Education</div>`;
+    state.eduEntries.forEach(e => {
+      main += `<div class="rv-edu">
+        <div class="rv-edu-deg">${[e.degree, e.field].filter(Boolean).join(' in ')}</div>
+        <div class="rv-edu-inst">${e.institution || ''}</div>
+        <div class="rv-edu-year">${[e.from, e.to].filter(Boolean).join(' – ')}${e.cgpa ? ` &nbsp;·&nbsp; CGPA: ${e.cgpa}` : ''}</div>
+      </div>`;
+    });
+    main += `</div>`;
+  }
+
+  if (state.certEntries.length) {
+    main += `<div class="rv-section"><div class="rv-section-title rv-modern">Certifications & Training</div>`;
+    state.certEntries.forEach(e => {
+      main += `<div style="margin-bottom:6px;font-size:12px"><strong>${e.name || 'Certificate'}</strong>${e.issuer ? ` — ${e.issuer}` : ''}${e.year ? ` (${e.year})` : ''}</div>`;
+    });
+    main += `</div>`;
+  }
+
+  if (awards) {
+    main += `<div class="rv-section">
+      <div class="rv-section-title rv-modern">Awards & Achievements</div>
+      <div class="rv-summary">${awards.replace(/\n/g,'<br>')}</div>
+    </div>`;
+  }
+
+  if (volunteer) {
+    main += `<div class="rv-section">
+      <div class="rv-section-title rv-modern">Volunteer & Co-Curriculum</div>
+      <div class="rv-summary">${volunteer.replace(/\n/g,'<br>')}</div>
+    </div>`;
+  }
+
+  main += `<div class="rv-section"><div class="rv-section-title rv-modern">References</div>`;
+  if (state.refEntries.length) {
+    state.refEntries.forEach(e => {
+      main += `<div style="margin-bottom:8px;font-size:12px">
+        <strong>${e.name || ''}</strong>${e.position ? `, ${e.position}` : ''}${e.company ? ` — ${e.company}` : ''}<br>
+        <span style="color:#777">${[e.phone, e.email].filter(Boolean).join(' | ')}</span>
+      </div>`;
+    });
+  } else {
+    main += `<div class="rv-refs">Available upon request.</div>`;
+  }
+  main += `</div></div>`;
+
+  return `<div style="display:flex;min-height:100%">${sidebar}${main}</div>`;
+}
+
 // ── EXPORT DOCX (real Word format, uploadable to Google Drive) ──
 async function downloadDocx() {
   const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, BorderStyle, Table, TableRow, TableCell, WidthType, ShadingType } = docx;
@@ -1842,14 +2202,15 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 3200);
 }
 
-// ── INIT: pre-add one entry each ──
+// ── INIT ──
 window.onload = () => {
   addEntry('exp');
   addEntry('edu');
   addEntry('lang');
-  // Open first sections
-  document.querySelectorAll('.section-header')[0].click(); // close personal (already open)
-  document.querySelectorAll('.section-header')[0].click(); // reopen
+  initDragAndDrop();
+  // Open first section
+  document.querySelectorAll('.section-header')[0].click();
+  document.querySelectorAll('.section-header')[0].click();
 };
 
 // Close modal on overlay click
