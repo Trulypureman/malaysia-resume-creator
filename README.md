@@ -12,13 +12,25 @@ A free, browser-based resume builder designed specifically for the **Malaysian j
 
 ---
 
+## What's New in v2
+
+| Feature | Details |
+| --- | --- |
+| PDF Export (jsPDF) | Real PDF generation via jsPDF + html2canvas — no more print dialog |
+| Template Toggle | Switch between **Corporate Classic** and **Modern Minimal** layouts |
+| Drag-and-Drop Reorder | Grab the handle on any section and drag it to reorder your resume structure |
+
+---
+
 ## Features
 
 - **Malaysian HR Standard** — Sections and field order follow what local recruiters expect
 - **Fill-in-the-blank Form** — No design skills needed; just fill and generate
 - **Live Preview** — See your formatted resume before downloading
-- **Download as PDF** — One click, print-to-PDF via browser
+- **Two Resume Templates** — Corporate Classic (traditional) or Modern Minimal (sidebar layout)
+- **Download as PDF** — Real PDF file generated client-side via jsPDF
 - **Export as .docx** — Real Word document, ready to upload to Google Drive and open in Google Docs
+- **Drag-and-Drop Section Reorder** — Customise the order sections appear in your resume
 - **ATS-Friendly** — Skills section structured to pass Applicant Tracking Systems
 - **Privacy First** — Zero data sent to any server; all processing is local
 
@@ -27,7 +39,7 @@ A free, browser-based resume builder designed specifically for the **Malaysian j
 ## Resume Sections Included
 
 | Section | Status | Notes |
-|---|---|---|
+| --- | --- | --- |
 | Personal Information | Required | Name, contact, NRIC, nationality, gender, race, marital status |
 | Professional Summary | Required | 3–5 sentence elevator pitch |
 | Work Experience | Required | Position, company, date range, achievements |
@@ -39,6 +51,18 @@ A free, browser-based resume builder designed specifically for the **Malaysian j
 | Volunteer & Co-Curriculum | Optional | Clubs, societies, community service |
 | Expected Salary & Availability | Optional | Notice period and relocation preference |
 | References | Optional | Auto-fills "Available upon request" if left blank |
+
+All sections support drag-and-drop reordering.
+
+---
+
+## Templates
+
+### Corporate Classic
+Traditional layout with a navy header underline and gold section dividers. Best for formal industries — finance, government, engineering.
+
+### Modern Minimal
+Two-column layout with a dark navy sidebar (contact, skills, languages) and a clean white main column. Best for creative, tech, and business roles.
 
 ---
 
@@ -54,11 +78,12 @@ A free, browser-based resume builder designed specifically for the **Malaysian j
 ## Tech Stack
 
 | Technology | Purpose |
-|---|---|
+| --- | --- |
 | HTML / CSS / JavaScript | Core application — single file, zero dependencies |
 | [docx.js](https://docx.js.org/) via CDN | Generates real `.docx` Word files client-side |
+| [jsPDF](https://github.com/parallax/jsPDF) via CDN | Generates real `.pdf` files client-side |
+| [html2canvas](https://html2canvas.hertzen.com/) via CDN | Renders resume HTML to canvas for PDF capture |
 | Google Fonts | Typography (DM Serif Display, DM Sans) |
-| Browser Print API | PDF generation via print-to-PDF |
 
 No frameworks. No build tools. No backend. The entire application is contained in a single `index.html` file.
 
@@ -98,4 +123,4 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ---
 
-<p align="center">Created by <strong>AhChai</strong> with Love</p>
+Created by **AhChai** with Love
