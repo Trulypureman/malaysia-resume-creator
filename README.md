@@ -1,8 +1,8 @@
 # Malaysia Resume Creator
 
-A free, browser-based resume builder designed specifically for the **Malaysian job market** — following HR-recommended standards from platforms like Jobstreet, Maukerja, and ResumeWriter.my.
+A free, browser-based resume builder for the **Malaysian job market**. It produces ATS-friendly resumes, checks them with a live ATS health score and matches them against a job description.
 
-> No sign-up. No data stored. Everything runs in your browser.
+> No sign-up. Nothing uploaded. Everything runs in your browser.
 
 ---
 
@@ -12,66 +12,67 @@ A free, browser-based resume builder designed specifically for the **Malaysian j
 
 ---
 
-## What's New in v2
+## What's New in v3
 
-| Feature | Details |
+| Area | Change |
 | --- | --- |
-| PDF Export (jsPDF) | Real PDF generation via jsPDF + html2canvas — no more print dialog |
-| Template Toggle | Switch between **Corporate Classic** and **Modern Minimal** layouts |
-| Drag-and-Drop Reorder | Grab the handle on any section and drag it to reorder your resume structure |
+| **Real text PDF** | The PDF is now built with real, selectable text via jsPDF. v2 exported a *screenshot*, which applicant tracking systems (ATS) cannot read. |
+| **ATS-safe templates** | Classic and Modern are both single-column. The v2 two-column sidebar was removed because ATS parsers often scramble columns. |
+| **ATS Health Score** | Live 0–100 score with fix-it tips: contact details, summary length, quantified bullets, weak openers ("Responsible for…"), skills count, date consistency, length and personal-data exposure. |
+| **Job Description Match** | Paste a JobStreet, LinkedIn, Hiredly or MauKerja ad to see matched and missing keywords. Tap a missing one to add it to your skills. |
+| **Section order works** | Drag (⠿) or use ↑ ↓ and the exported resume follows the same order. In v2, reordering didn't affect the output. Includes *Experienced* and *Fresh graduate* presets. |
+| **Auto-save & backup** | Data auto-saves to your browser's localStorage. Backup and Restore it as JSON to move between devices. |
+| **Better Word export** | Real Word headings, native bullets, right-aligned dates on a tab stop and A4 page size. |
+| **Plain-text copy** | One click copies an ATS-clean text version for online application forms. |
+| **Projects section** | Built for fresh grads and tech roles: final year project, side projects, freelance work. |
+| **Privacy by default** | NRIC, DOB, race, gender and marital status are hidden unless you switch them on. |
+| **Auto-fit PDF** | If only a few lines spill onto the next page, spacing tightens automatically. Font sizes stay the same. |
+| **Hardening** | All user input is HTML-escaped, entries can be reordered, and the app works on mobile. |
 
 ---
 
-## Features
+## Why These Choices (ATS Rules Applied)
 
-- **Malaysian HR Standard** — Sections and field order follow what local recruiters expect
-- **Fill-in-the-blank Form** — No design skills needed; just fill and generate
-- **Live Preview** — See your formatted resume before downloading
-- **Two Resume Templates** — Corporate Classic (traditional) or Modern Minimal (sidebar layout)
-- **Download as PDF** — Real PDF file generated client-side via jsPDF
-- **Export as .docx** — Real Word document, ready to upload to Google Drive and open in Google Docs
-- **Drag-and-Drop Section Reorder** — Customise the order sections appear in your resume
-- **ATS-Friendly** — Skills section structured to pass Applicant Tracking Systems
-- **Privacy First** — Zero data sent to any server; all processing is local
+- **Single column, no tables, no text boxes, no images.** Parsers such as Workday, SAP SuccessFactors, Taleo and Greenhouse read top-to-bottom text most reliably.
+- **Standard headings:** "Professional Summary", "Skills", "Work Experience", "Education" and "Certifications". These map cleanly to ATS fields.
+- **Standard fonts:** Times/Helvetica in the PDF, Georgia/Calibri/Arial in Word.
+- **Contact details in the body**, not in a header or footer, which some parsers skip.
+- **Dates as `Mon YYYY – Mon YYYY`** on the same line as the job title.
+- **Skills as plain comma-separated text**, not graphics or rating bars.
 
 ---
 
-## Resume Sections Included
+## Resume Sections
 
-| Section | Status | Notes |
+| Section | Default | Notes |
 | --- | --- | --- |
-| Personal Information | Required | Name, contact, NRIC, nationality, gender, race, marital status |
-| Professional Summary | Required | 3–5 sentence elevator pitch |
-| Work Experience | Required | Position, company, date range, achievements |
-| Education | Required | Degree, institution, CGPA |
-| Key Skills | Required | Hard skills and soft skills, tag-based and ATS-optimised |
-| Languages | Optional | With proficiency level — important in the Malaysian market |
-| Certifications & Training | Optional | HRDF, Google, CIDB, online certifications |
-| Awards & Achievements | Optional | Academic and professional recognition |
-| Volunteer & Co-Curriculum | Optional | Clubs, societies, community service |
-| Expected Salary & Availability | Optional | Notice period and relocation preference |
-| References | Optional | Auto-fills "Available upon request" if left blank |
-
-All sections support drag-and-drop reordering.
+| Contact Details | Core | Name, target job title, email, phone, location, LinkedIn, portfolio |
+| Personal Particulars | Off | NRIC, DOB, gender, race, marital status, nationality. Shown only if you turn them on |
+| Professional Summary | Core | 40–100 words |
+| Skills | Core | Hard skills/tools and soft skills |
+| Work Experience | Core | Employment type, dates, achievement bullets |
+| Projects | Optional | Strong for fresh grads and tech roles |
+| Education | Core | Covers PhD to SPM, plus UEC, STPM, Matriculation and SKM |
+| Certifications | Optional | Professional certs, HRD Corp courses, licences |
+| Languages | Optional | Proficiency plus proof (MUET, IELTS, HSK) |
+| Awards & Achievements | Optional | |
+| Leadership & Activities | Optional | Co-curricular, clubs, volunteering |
+| Additional Information | Optional | Expected/current salary, notice period, relocation, driving licence |
+| References | Optional | "Available upon request" line is opt-in |
 
 ---
 
-## Templates
+## Known Limitation
 
-### Corporate Classic
-Traditional layout with a navy header underline and gold section dividers. Best for formal industries — finance, government, engineering.
-
-### Modern Minimal
-Two-column layout with a dark navy sidebar (contact, skills, languages) and a clean white main column. Best for creative, tech, and business roles.
+The PDF uses the standard built-in PDF fonts, which support Latin characters only. If your resume contains Chinese, Tamil or Jawi script, the app warns you and drops those characters from the PDF. Use the **Word (.docx)** export to keep them.
 
 ---
 
 ## How to Export to Google Docs
 
-1. Fill in your resume details
-2. Click **Export .docx**
-3. Open [Google Drive](https://drive.google.com) and upload the downloaded `.docx` file
-4. Right-click the file and select **Open with Google Docs**
+1. Click **Word (.docx)**
+2. Upload the file to [Google Drive](https://drive.google.com)
+3. Right-click it and choose **Open with › Google Docs**
 
 ---
 
@@ -79,13 +80,12 @@ Two-column layout with a dark navy sidebar (contact, skills, languages) and a cl
 
 | Technology | Purpose |
 | --- | --- |
-| HTML / CSS / JavaScript | Core application — single file, zero dependencies |
-| [docx.js](https://docx.js.org/) via CDN | Generates real `.docx` Word files client-side |
-| [jsPDF](https://github.com/parallax/jsPDF) via CDN | Generates real `.pdf` files client-side |
-| [html2canvas](https://html2canvas.hertzen.com/) via CDN | Renders resume HTML to canvas for PDF capture |
-| Google Fonts | Typography (DM Serif Display, DM Sans) |
+| HTML / CSS / JavaScript | The whole app lives in a single file. No framework, no build step |
+| [jsPDF](https://github.com/parallax/jsPDF) 2.5.1 (CDN) | Text-based PDF generation |
+| [docx](https://docx.js.org/) 8.5.0 (CDN) | Native Word document generation |
+| Google Fonts | UI typography (DM Serif Display, DM Sans) |
 
-No frameworks. No build tools. No backend. The entire application is contained in a single `index.html` file.
+Architecture: the form state is turned into a single **resume model**. Four renderers (HTML preview, PDF, DOCX, plain text) draw from that model, so every output always contains the same content in the same order.
 
 ---
 
@@ -93,9 +93,9 @@ No frameworks. No build tools. No backend. The entire application is contained i
 
 ```
 malaysia-resume-creator/
-│
-├── index.html       # The entire application (single file)
-└── README.md        # This file
+├── index.html   # The entire application
+├── README.md
+└── LICENSE
 ```
 
 ---
@@ -105,21 +105,21 @@ malaysia-resume-creator/
 Suggestions and improvements are welcome.
 
 1. Fork the repository
-2. Create a new branch: `git checkout -b feature/your-feature`
-3. Commit your changes: `git commit -m "Add your feature"`
+2. Create a branch: `git checkout -b feature/your-feature`
+3. Commit: `git commit -m "Add your feature"`
 4. Push and open a Pull Request
 
 ---
 
 ## Disclaimer
 
-This is a personal fun project built for learning and convenience purposes only. It is not intended for commercialisation, monetary gain, or any form of business use. All resume data is processed entirely in your browser — nothing is stored or transmitted to any server.
+This is a personal fun project built for learning and convenience only. It is not intended for commercialisation, monetary gain or any business use. The ATS score is guidance, not a guarantee, because every employer configures its ATS differently. All resume data is processed in your browser and stored only in your browser's localStorage.
 
 ---
 
 ## License
 
-This project is open source and available under the [MIT License](LICENSE).
+Open source under the [MIT License](LICENSE).
 
 ---
 
