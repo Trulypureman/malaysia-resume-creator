@@ -39,68 +39,113 @@
   :focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 
   /* ── HEADER ── */
+  html { scroll-behavior: smooth; }
   .topbar {
-    background: var(--navy);
-    padding: 16px 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    background: rgba(13,27,42,0.96);
+    backdrop-filter: blur(8px);
+    height: 64px;
+    padding: 0 32px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    position: sticky; top: 0; z-index: 100;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
   }
-  .logo { display: flex; align-items: center; gap: 12px; }
-  .logo-icon {
-    width: 38px; height: 38px;
+  .logo { display: flex; align-items: center; gap: 10px; color: var(--white); text-decoration: none; }
+  .logo-mark {
+    width: 34px; height: 34px; border-radius: 8px;
     background: linear-gradient(135deg, var(--gold), var(--gold-light));
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
+    display: grid; place-items: center; color: var(--navy); flex-shrink: 0;
   }
-  .logo-text { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--white); }
+  .logo-mark svg { width: 18px; height: 18px; }
+  .logo-text { font-family: 'DM Serif Display', serif; font-size: 19px; white-space: nowrap; }
   .logo-text span { color: var(--gold); }
-  .header-badge {
-    background: rgba(201,168,76,0.15);
-    border: 1px solid rgba(201,168,76,0.4);
-    color: var(--gold-light);
-    font-size: 11px; font-weight: 600;
-    padding: 5px 12px; border-radius: 20px;
-    letter-spacing: 0.5px; text-transform: uppercase; white-space: nowrap;
+  .nav { display: flex; align-items: center; gap: 6px; }
+  .nav a {
+    color: rgba(255,255,255,0.75); font-size: 13px; font-weight: 500; text-decoration: none;
+    padding: 8px 12px; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
   }
-  @media (max-width: 560px) { .topbar { padding: 12px 16px; } .logo-text { font-size: 16px; } .header-badge { display: none; } }
+  .nav a:hover { color: var(--white); background: rgba(255,255,255,0.08); }
+  .nav a svg { width: 16px; height: 16px; }
+  .nav .nav-cta { background: var(--gold); color: var(--navy); font-weight: 600; }
+  .nav .nav-cta:hover { background: var(--gold-light); color: var(--navy); }
+  @media (max-width: 640px) { .topbar { padding: 0 16px; height: 56px; } .logo-text { font-size: 16px; } .nav .nav-hide { display: none; } }
+  @media (max-width: 380px) { .logo-text { font-size: 14.5px; } .nav a { padding: 7px 10px; font-size: 12px; } }
 
   /* ── HERO ── */
   .hero {
-    background: linear-gradient(160deg, var(--navy) 0%, #1a2d44 60%, #243850 100%);
-    padding: 48px 24px 42px;
-    text-align: center;
+    position: relative; overflow: hidden;
+    background:
+      radial-gradient(900px 420px at 88% -10%, rgba(201,168,76,0.20), transparent 60%),
+      linear-gradient(160deg, var(--navy) 0%, #15263b 55%, #1f3550 100%);
   }
-  .hero-tag {
-    display: inline-block;
-    background: rgba(201,168,76,0.2);
-    border: 1px solid rgba(201,168,76,0.5);
-    color: var(--gold-light);
-    font-size: 11px; font-weight: 600;
-    padding: 6px 16px; border-radius: 20px;
-    letter-spacing: 1.5px; text-transform: uppercase;
-    margin-bottom: 18px;
+  .hero::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background-image: radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px);
+    background-size: 22px 22px;
+    -webkit-mask-image: linear-gradient(to bottom, #000, transparent 90%);
+            mask-image: linear-gradient(to bottom, #000, transparent 90%);
   }
-  .hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(28px, 5vw, 44px); color: var(--white); line-height: 1.2; margin-bottom: 14px; font-weight: 400; }
-  .hero h1 span { color: var(--gold); }
-  .hero p { color: rgba(255,255,255,0.75); font-size: 15px; max-width: 600px; margin: 0 auto 26px; line-height: 1.7; font-weight: 300; }
-  .hero-steps { display: flex; justify-content: center; gap: 26px; flex-wrap: wrap; }
-  .step { display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.8); font-size: 13px; }
-  .step-num {
-    width: 26px; height: 26px; border-radius: 50%;
-    background: var(--gold); color: var(--navy);
-    font-weight: 700; font-size: 12px;
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  .hero-inner {
+    position: relative; max-width: 1260px; margin: 0 auto;
+    padding: 72px 24px 80px;
+    display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 56px; align-items: center;
+  }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    color: var(--gold-light); font-size: 12px; font-weight: 600;
+    letter-spacing: 1.4px; text-transform: uppercase; margin-bottom: 18px;
+  }
+  .eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--gold); }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif; font-weight: 400;
+    font-size: clamp(34px, 4.8vw, 58px); line-height: 1.06; letter-spacing: -0.5px;
+    color: var(--white); margin-bottom: 20px; text-wrap: balance;
+  }
+  .hero h1 em { font-style: italic; color: var(--gold); }
+  .hero-lead { color: rgba(255,255,255,0.74); font-size: 17px; line-height: 1.65; max-width: 520px; margin-bottom: 30px; font-weight: 300; }
+  .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 30px; }
+  .trust { display: flex; flex-wrap: wrap; gap: 10px 24px; list-style: none; }
+  .trust li { display: flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.72); font-size: 13px; }
+  .trust svg { width: 16px; height: 16px; color: var(--gold); flex-shrink: 0; }
+
+  .hero-visual { position: relative; justify-self: center; width: 100%; max-width: 400px; }
+  .mock { background: #fff; border-radius: 10px; padding: 28px 26px 30px; box-shadow: 0 30px 80px rgba(0,0,0,0.45); transform: rotate(-1.5deg); }
+  .mock-name { font-family: Georgia, serif; font-weight: 700; font-size: 18px; color: var(--navy); text-align: center; }
+  .mock-role { text-align: center; font-size: 11px; color: #666; margin: 2px 0 10px; }
+  .mock-rule { height: 2px; background: var(--gold); margin-bottom: 4px; }
+  .mock-h { font-size: 9px; font-weight: 700; letter-spacing: 1.2px; color: var(--navy); border-bottom: 1px solid var(--gold); padding-bottom: 3px; margin: 12px 0 7px; }
+  .mock-line { height: 6px; border-radius: 3px; background: #e9e5dc; margin-bottom: 6px; }
+  .mock-row { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; margin: 8px 0 6px; }
+  .mock-row b { font-size: 10px; color: #222; }
+  .mock-row span { font-size: 9px; color: #888; }
+  .mock-skills { display: flex; flex-wrap: wrap; gap: 5px; }
+  .mock-skills i { font-style: normal; font-size: 9px; padding: 2px 7px; border-radius: 10px; background: #f1ede4; color: #444; }
+  .float {
+    position: absolute; background: var(--white); border-radius: 12px;
+    box-shadow: 0 14px 40px rgba(0,0,0,0.3); padding: 12px 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .float-score { top: 16%; left: -40px; }
+  .float-match { bottom: 10%; right: -32px; display: block; }
+  .mini-ring { width: 44px; height: 44px; border-radius: 50%; background: conic-gradient(var(--success) 96%, var(--cream-dark) 0); display: grid; place-items: center; }
+  .mini-ring b { width: 34px; height: 34px; border-radius: 50%; background: #fff; display: grid; place-items: center; font-size: 13px; color: var(--navy); }
+  .float small { display: block; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; }
+  .float strong { font-size: 14px; color: var(--navy); }
+  .float .bar { width: 120px; height: 6px; background: var(--cream-dark); border-radius: 4px; margin-top: 6px; overflow: hidden; }
+  .float .bar i { display: block; height: 100%; width: 88%; background: var(--success); }
+  @media (max-width: 1000px) {
+    .hero-inner { grid-template-columns: minmax(0, 1fr); padding: 52px 24px 64px; gap: 48px; }
+    .hero-visual { max-width: 360px; }
+  }
+  @media (max-width: 640px) {
+    .hero-inner { padding: 40px 16px 44px; }
+    .hero-visual { display: none; }
+    .hero-lead { font-size: 15.5px; }
+    .hero-ctas .btn { flex: 1 1 auto; justify-content: center; }
   }
 
   /* ── LAYOUT ── */
   .layout {
+    scroll-margin-top: 64px;
     max-width: 1260px;
     margin: 0 auto;
     padding: 32px 24px 60px;
@@ -138,15 +183,17 @@
   @media (max-width: 700px) { .save-status { margin-left: 0; width: 100%; } }
 
   .ats-note {
-    background: rgba(45,122,79,0.08);
-    border: 1px solid rgba(45,122,79,0.25);
+    display: flex; gap: 10px; align-items: flex-start;
+    background: rgba(45,122,79,0.07);
+    border: 1px solid rgba(45,122,79,0.22);
     color: #1f5a39;
     border-radius: 12px;
-    padding: 12px 16px;
+    padding: 11px 14px;
     font-size: 13px;
-    line-height: 1.6;
+    line-height: 1.55;
     margin-bottom: 16px;
   }
+  .ats-note svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; }
 
   /* ── SECTION CARD ── */
   .form-section {
@@ -166,11 +213,12 @@
   }
   .section-header[aria-expanded="true"] { border-bottom: 1px solid var(--border); }
   .section-icon {
-    width: 36px; height: 36px; border-radius: 8px;
-    background: linear-gradient(135deg, var(--navy), var(--navy-2));
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px; flex-shrink: 0;
+    width: 36px; height: 36px; border-radius: 9px;
+    background: rgba(13,27,42,0.06); color: var(--navy);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
   }
+  .section-icon svg { width: 18px; height: 18px; }
+  .form-section:hover .section-icon { background: rgba(201,168,76,0.18); }
   .section-title-wrap { flex: 1; min-width: 0; }
   .section-title { font-family: 'DM Serif Display', serif; font-size: 17px; color: var(--navy); margin-bottom: 2px; }
   .section-sub { font-size: 12px; color: var(--muted); }
@@ -318,6 +366,10 @@
   .btn-gold:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(201,168,76,0.35); }
   .btn-outline { background: var(--white); border: 1.5px solid var(--border); color: var(--text); }
   .btn-outline:hover { border-color: var(--navy); background: var(--cream); }
+  a.btn { text-decoration: none; }
+  .btn-lg { padding: 14px 24px; font-size: 15px; border-radius: 10px; }
+  .btn-ghost { background: rgba(255,255,255,0.06); color: var(--white); border: 1px solid rgba(255,255,255,0.25); }
+  .btn-ghost:hover { background: rgba(255,255,255,0.12); }
 
   /* ── INSIGHTS PANEL ── */
   .panel { position: sticky; top: 86px; display: flex; flex-direction: column; gap: 16px; }
@@ -440,25 +492,57 @@
 <body>
 
 <header class="topbar">
-  <div class="logo">
-    <div class="logo-icon" aria-hidden="true">📄</div>
-    <div class="logo-text">Malaysia <span>Resume</span> Creator</div>
-  </div>
-  <div class="header-badge">v3 · ATS-Ready</div>
+  <a class="logo" href="#top" aria-label="Malaysia Resume Creator, back to top">
+    <span class="logo-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></span>
+    <span class="logo-text">Malaysia <span>Resume</span> Creator</span>
+  </a>
+  <nav class="nav" aria-label="Primary">
+    <a class="nav-hide" href="https://github.com/Trulypureman/malaysia-resume-creator" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg>Source</a>
+    <a class="nav-cta" href="#builder">Build my resume</a>
+  </nav>
 </header>
 
-<section class="hero">
-  <div class="hero-tag">🇲🇾 Built for Malaysian Job Seekers</div>
-  <h1>A Resume That <span>Passes the ATS</span><br>and Impresses the Recruiter</h1>
-  <p>Single-column layout, real selectable text and standard section headings, which are what applicant tracking systems parse best. Check your score live, match it to a job ad, then export to PDF or Word.</p>
-  <div class="hero-steps">
-    <div class="step"><div class="step-num">1</div> Fill in your details</div>
-    <div class="step"><div class="step-num">2</div> Fix ATS score &amp; match the job ad</div>
-    <div class="step"><div class="step-num">3</div> Export PDF / Word / plain text</div>
+<section class="hero" id="top">
+  <div class="hero-inner">
+    <div>
+      <div class="eyebrow">Free resume builder · Malaysia</div>
+      <h1>Get past the ATS. <em>Get the interview.</em></h1>
+      <p class="hero-lead">Build a clean, ATS-friendly resume in minutes. It scores your resume as you type with clear fixes, matches it to any job ad, and exports to PDF, Word or plain text.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-gold btn-lg" href="#builder">Start building →</a>
+        <button type="button" class="btn btn-ghost btn-lg" onclick="heroSample()">See a sample</button>
+      </div>
+      <ul class="trust">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Free, no sign-up</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Your data stays on your device</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>PDF, Word &amp; plain text</li>
+      </ul>
+    </div>
+
+    <div class="hero-visual" aria-hidden="true">
+      <div class="mock">
+        <div class="mock-name">Nurul Aisyah binti Rahman</div>
+        <div class="mock-role">Digital Marketing Executive · Petaling Jaya</div>
+        <div class="mock-rule"></div>
+        <div class="mock-h">PROFESSIONAL SUMMARY</div>
+        <div class="mock-line"></div><div class="mock-line"></div><div class="mock-line" style="width:72%"></div>
+        <div class="mock-h">SKILLS</div>
+        <div class="mock-skills"><i>Google Ads</i><i>SEO</i><i>GA4</i><i>Shopee</i><i>HubSpot</i><i>Excel</i></div>
+        <div class="mock-h">WORK EXPERIENCE</div>
+        <div class="mock-row"><b>Digital Marketing Executive</b><span>2023 – Present</span></div>
+        <div class="mock-line"></div><div class="mock-line" style="width:88%"></div><div class="mock-line" style="width:64%"></div>
+        <div class="mock-row"><b>Marketing Executive</b><span>2021 – 2023</span></div>
+        <div class="mock-line" style="width:94%"></div><div class="mock-line" style="width:58%"></div>
+        <div class="mock-h">EDUCATION</div>
+        <div class="mock-line" style="width:80%"></div>
+      </div>
+      <div class="float float-score"><div class="mini-ring"><b>96</b></div><div><small>ATS score</small><strong>Interview-ready</strong></div></div>
+      <div class="float float-match"><small>Job ad match</small><strong>88% keywords</strong><div class="bar"><i></i></div></div>
+    </div>
   </div>
 </section>
 
-<main class="layout">
+<main class="layout" id="builder">
 <div>
 
   <div class="toolbar">
@@ -485,11 +569,12 @@
   </div>
 
   <div class="ats-note">
-    <strong>Both templates are ATS-safe.</strong> Every export uses a single column, real text (no images), standard fonts and standard headings like "Work Experience" and "Education". Drag a section by ⠿ or use ↑ ↓ to reorder it, and your resume follows the same order.
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/></svg>
+    <span><strong>Both templates are ATS-safe:</strong> single column, real text and standard headings. Reorder sections with ⠿ or ↑ ↓, and your resume follows the same order.</span>
   </div>
 
   <!-- PERSONAL (fixed at top) -->
-  <div class="form-section" id="sec-personal" data-icon="👤" data-title="Contact Details" data-sub="Name, target title and how to reach you" data-badge="core" data-open="1">
+  <div class="form-section" id="sec-personal" data-icon="user" data-title="Contact Details" data-sub="Name, target title and how to reach you" data-badge="core" data-open="1">
     <div class="form-grid">
       <div class="field">
         <label for="f-name">Full Name <span class="req">*</span></label>
@@ -562,7 +647,7 @@
 
   <div id="sortable">
 
-    <div class="form-section" data-section="summary" id="sec-summary" data-icon="✍️" data-title="Professional Summary" data-sub="3–4 sentences: who you are, experience, top skills, one proof point" data-badge="core">
+    <div class="form-section" data-section="summary" id="sec-summary" data-icon="summary" data-title="Professional Summary" data-sub="3–4 sentences: who you are, experience, top skills, one proof point" data-badge="core">
       <div class="field">
         <label for="f-summary">Professional Summary <span class="req">*</span></label>
         <textarea id="f-summary" data-field="summary" rows="5" placeholder="e.g. Accounts Executive with 5 years of full-set accounting experience in manufacturing. Skilled in SQL Account, MFRS reporting and SST compliance. Cut month-end closing from 10 to 6 working days by automating reconciliations in Excel Power Query. ACCA Part-Qualified."></textarea>
@@ -570,7 +655,7 @@
       </div>
     </div>
 
-    <div class="form-section" data-section="skills" id="sec-skills" data-icon="⚡" data-title="Skills" data-sub="Keywords the ATS searches for" data-badge="core">
+    <div class="form-section" data-section="skills" id="sec-skills" data-icon="skills" data-title="Skills" data-sub="Keywords the ATS searches for" data-badge="core">
       <div class="form-grid">
         <div class="field span-2">
           <label for="hard-input">Technical / Hard Skills &amp; Tools</label>
@@ -592,48 +677,48 @@
       <span class="hint hint-block">List 8–15 skills, mostly hard skills, named exactly as the job ad does: "Google Analytics 4", not "analytics". Abbreviations: add both if you have room, e.g. "Search Engine Optimisation (SEO)".</span>
     </div>
 
-    <div class="form-section" data-section="exp" id="sec-exp" data-icon="💼" data-title="Work Experience" data-sub="Most recent first, including internships and part-time roles" data-badge="core">
+    <div class="form-section" data-section="exp" id="sec-exp" data-icon="exp" data-title="Work Experience" data-sub="Most recent first, including internships and part-time roles" data-badge="core">
       <div class="entries-wrap" id="exp-entries"></div>
       <button class="add-btn" onclick="addEntry('exp')">＋ Add Work Experience</button>
       <span class="hint hint-block">Formula: <strong>Action verb + what you did + measurable result</strong>, e.g. "Reduced invoice processing time 40% by automating approvals in SAP." Put numbers in at least 40% of your bullets.</span>
     </div>
 
-    <div class="form-section" data-section="proj" id="sec-proj" data-icon="🛠️" data-title="Projects" data-sub="Final year project, side projects, freelance — strong for fresh grads &amp; tech" data-badge="optional">
+    <div class="form-section" data-section="proj" id="sec-proj" data-icon="proj" data-title="Projects" data-sub="Final year project, side projects, freelance — strong for fresh grads &amp; tech" data-badge="optional">
       <div class="entries-wrap" id="proj-entries"></div>
       <button class="add-btn" onclick="addEntry('proj')">＋ Add Project</button>
     </div>
 
-    <div class="form-section" data-section="edu" id="sec-edu" data-icon="🎓" data-title="Education" data-sub="Highest qualification first" data-badge="core">
+    <div class="form-section" data-section="edu" id="sec-edu" data-icon="edu" data-title="Education" data-sub="Highest qualification first" data-badge="core">
       <div class="entries-wrap" id="edu-entries"></div>
       <button class="add-btn" onclick="addEntry('edu')">＋ Add Education</button>
       <span class="hint hint-block">Have a degree? Leave SPM out unless the job asks for it. Include your CGPA if it is 3.00 or higher, or if you graduated within the last 3 years.</span>
     </div>
 
-    <div class="form-section" data-section="cert" id="sec-cert" data-icon="🏅" data-title="Certifications" data-sub="Professional certs, HRD Corp-claimable courses, licences" data-badge="optional">
+    <div class="form-section" data-section="cert" id="sec-cert" data-icon="cert" data-title="Certifications" data-sub="Professional certs, HRD Corp-claimable courses, licences" data-badge="optional">
       <div class="entries-wrap" id="cert-entries"></div>
       <button class="add-btn" onclick="addEntry('cert')">＋ Add Certification</button>
     </div>
 
-    <div class="form-section" data-section="lang" id="sec-lang" data-icon="🗣️" data-title="Languages" data-sub="A real advantage in Malaysia's multilingual market" data-badge="optional">
+    <div class="form-section" data-section="lang" id="sec-lang" data-icon="lang" data-title="Languages" data-sub="A real advantage in Malaysia's multilingual market" data-badge="optional">
       <div class="entries-wrap" id="lang-entries"></div>
       <button class="add-btn" onclick="addEntry('lang')">＋ Add Language</button>
     </div>
 
-    <div class="form-section" data-section="awards" id="sec-awards" data-icon="🏆" data-title="Awards &amp; Achievements" data-sub="Academic, sales, competition and company recognition" data-badge="optional">
+    <div class="form-section" data-section="awards" id="sec-awards" data-icon="awards" data-title="Awards &amp; Achievements" data-sub="Academic, sales, competition and company recognition" data-badge="optional">
       <div class="field">
         <label for="f-awards">One per line</label>
         <textarea id="f-awards" data-field="awards" rows="3" placeholder="Dean's List, Universiti Malaya (5 semesters)&#10;Top Sales Performer Q3 2024, XYZ Sdn Bhd (RM 1.2M closed)"></textarea>
       </div>
     </div>
 
-    <div class="form-section" data-section="volunteer" id="sec-volunteer" data-icon="🤝" data-title="Leadership &amp; Activities" data-sub="Co-curricular, clubs, volunteering — valued by MY employers" data-badge="optional">
+    <div class="form-section" data-section="volunteer" id="sec-volunteer" data-icon="volunteer" data-title="Leadership &amp; Activities" data-sub="Co-curricular, clubs, volunteering — valued by MY employers" data-badge="optional">
       <div class="field">
         <label for="f-volunteer">One per line</label>
         <textarea id="f-volunteer" data-field="volunteer" rows="3" placeholder="President, UPM Debate Club (2021–2022): grew membership from 40 to 95&#10;Volunteer, The Lost Food Project (2023–Present)"></textarea>
       </div>
     </div>
 
-    <div class="form-section" data-section="additional" id="sec-additional" data-icon="💰" data-title="Additional Information" data-sub="Salary, availability, licence — Malaysian HR often asks" data-badge="optional">
+    <div class="form-section" data-section="additional" id="sec-additional" data-icon="additional" data-title="Additional Information" data-sub="Salary, availability, licence — Malaysian HR often asks" data-badge="optional">
       <div class="form-grid">
         <div class="field">
           <label for="f-expectedSalary">Expected Salary</label>
@@ -659,7 +744,7 @@
       <span class="hint hint-block">Disclosing your current salary is optional and it weakens your negotiating position. Many recruiters ask for expected salary only, and JobStreet collects it on the application form anyway.</span>
     </div>
 
-    <div class="form-section" data-section="ref" id="sec-ref" data-icon="📋" data-title="References" data-sub="Optional — usually provided at offer stage" data-badge="optional">
+    <div class="form-section" data-section="ref" id="sec-ref" data-icon="ref" data-title="References" data-sub="Optional — usually provided at offer stage" data-badge="optional">
       <div class="entries-wrap" id="ref-entries"></div>
       <button class="add-btn" onclick="addEntry('ref')">＋ Add Reference</button>
       <div class="field check-field" style="margin-top:12px;padding-bottom:0">
@@ -921,6 +1006,27 @@ function downloadBlob(blob, filename) {
 // ════════════════════════════════════════════════════════════════
 //  FORM UI
 // ════════════════════════════════════════════════════════════════
+const ICONS = {
+  user: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+  summary: '<path d="M4 6h16M4 12h16M4 18h10"/>',
+  skills: '<path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/>',
+  exp: '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 13h18"/>',
+  proj: '<path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/>',
+  edu: '<path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/>',
+  cert: '<circle cx="12" cy="9" r="6"/><path d="m8.5 14-1.5 8 5-3 5 3-1.5-8"/>',
+  lang: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
+  awards: '<path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3l-5.6 2.9 1.1-6.2L3 9.6l6.2-.9z"/>',
+  volunteer: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"/>',
+  additional: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/>',
+  ref: '<path d="M6 3h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><circle cx="12" cy="10" r="2.5"/><path d="M8.5 16.5a3.5 3.5 0 0 1 7 0"/>',
+};
+const icon = k => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICONS[k] || ''}</svg>`;
+
+function heroSample() {
+  loadSample();
+  document.getElementById('builder').scrollIntoView({ behavior: 'smooth' });
+}
+
 function decorateSections() {
   document.querySelectorAll('.form-section').forEach(sec => {
     const key = sec.dataset.section;
@@ -938,7 +1044,7 @@ function decorateSections() {
     header.setAttribute('aria-expanded', open ? 'true' : 'false');
     header.innerHTML = `
       ${key ? '<span class="drag-handle" title="Drag to reorder" aria-hidden="true">⠿⠿</span>' : ''}
-      <div class="section-icon" aria-hidden="true">${sec.dataset.icon || ''}</div>
+      <div class="section-icon" aria-hidden="true">${icon(sec.dataset.icon)}</div>
       <div class="section-title-wrap">
         <div class="section-title">${sec.dataset.title}</div>
         <div class="section-sub">${sec.dataset.sub || ''}</div>
